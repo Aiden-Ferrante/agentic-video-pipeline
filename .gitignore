@@ -1,0 +1,47 @@
+# derived — regenerate with `doit`
+.doit.db
+videos/*/beats/
+videos/*/out/
+
+# media is binary and regenerable; SIDECARS ARE TRUTH and must stay tracked
+videos/*/assets/*
+!videos/*/assets/*.json
+
+# The Gen Lab's variant pool. Same rule as assets and for the same reason: the
+# media is regenerable from the recipe the sidecar carries, and the SIDECAR is
+# the record of what was generated and which variant won. A pool of rejected
+# 2MB PNGs is not history worth keeping in git; knowing they existed is.
+# The directory re-include is load-bearing: git does not descend into an
+# excluded directory, so without it the .json negation below never runs.
+videos/*/pool/**
+!videos/*/pool/**/
+!videos/*/pool/**/*.json
+
+# voice: the audio is large and, for scratch VO, regenerable. The sidecars and
+# the alignments stay — an alignment is small, and it is the timing the edit
+# was built against. A real TAKE is NOT regenerable (a performance is
+# unrepeatable), so takes/ is tracked deliberately despite being media.
+videos/*/voice/*
+!videos/*/voice/*.json
+!videos/*/voice/takes/
+!videos/*/voice/reference.wav
+!videos/*/voice/.gitkeep
+libraries/*/*
+!libraries/*/*.json
+!libraries/*/.gitkeep
+!libraries/README.md
+# the SFX kit (finish/sfx_lib.py): sounds are derived from sonniss-gdc2026; provenance.json is the record
+!libraries/sound/kit/
+libraries/sound/kit/*
+!libraries/sound/kit/provenance.json
+
+# environment
+.venv/
+__pycache__/
+*.pyc
+
+# Output of a build launched from the canvas (map/serve.py /api/run).
+.last-run.log
+
+# Derived project timelines — composed from the modules by `doit program`.
+out/

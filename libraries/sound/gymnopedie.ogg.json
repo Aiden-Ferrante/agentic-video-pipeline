@@ -1,0 +1,32 @@
+{
+  "hash": "sha256:20a8311eb71e2675de49fa287ef1c0929962838a6dffd76bbf52851c85d70f5d",
+  "id": "gymnopedie",
+  "library": "sound",
+  "provenance": {
+    "digital_source_type": "algorithmicMedia",
+    "inputs": {
+      "title": "File:Gymnop\u00e9die no.3.ogg"
+    },
+    "model": "",
+    "produced_utc": "2026-08-28T12:36:06+00:00",
+    "prompt": "",
+    "seed": null,
+    "stem": "music",
+    "tool": "commons",
+    "tool_version": ""
+  },
+  "rights": {
+    "attribution_override": "",
+    "attribution_required": false,
+    "creator": "Teknopazzo",
+    "creator_url": "",
+    "modification_note": "",
+    "modified": false,
+    "retrieved_utc": "2026-08-28T12:36:06.904488+00:00",
+    "source_url": "https://commons.wikimedia.org/wiki/File%3AGymnop%C3%A9die_no.3.ogg",
+    "spdx_license": "CC0-1.0",
+    "title": "Gymnop\u00e9die no.3"
+  },
+  "selected": true,
+  "size_bytes": 5604668
+}

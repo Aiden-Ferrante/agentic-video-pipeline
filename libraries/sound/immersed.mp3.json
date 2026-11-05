@@ -1,0 +1,32 @@
+{
+  "hash": "sha256:870fa4f642816b2207cf74e48c36cbbbd147df99be24f08f29aa26ac0597a44b",
+  "id": "immersed",
+  "library": "sound",
+  "provenance": {
+    "digital_source_type": "digitalCapture",
+    "inputs": {
+      "source_url": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Immersed.mp3"
+    },
+    "model": "",
+    "produced_utc": "2026-08-27T02:37:17+00:00",
+    "prompt": "",
+    "seed": null,
+    "stem": "music",
+    "tool": "incompetech",
+    "tool_version": ""
+  },
+  "rights": {
+    "attribution_override": "\"Immersed\" Kevin MacLeod (incompetech.com), Licensed under Creative Commons: By Attribution 4.0",
+    "attribution_required": true,
+    "creator": "Kevin MacLeod",
+    "creator_url": "https://incompetech.com",
+    "modification_note": "",
+    "modified": false,
+    "retrieved_utc": "2026-08-27T02:37:17+00:00",
+    "source_url": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Immersed.mp3",
+    "spdx_license": "CC-BY-4.0",
+    "title": "Immersed"
+  },
+  "selected": true,
+  "size_bytes": 7969389
+}

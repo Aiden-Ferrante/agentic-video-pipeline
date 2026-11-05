@@ -1,0 +1,32 @@
+{
+  "hash": "sha256:1e50d9e513c37725e8d8f378787a87330b040505ec679f9e919b01f2f4eae25f",
+  "id": "cello-suite-prelude",
+  "library": "sound",
+  "provenance": {
+    "digital_source_type": "algorithmicMedia",
+    "inputs": {
+      "title": "File:Bach Cello Suite 1 Prelude (BWV 1007) Played by Chris.ogg"
+    },
+    "model": "",
+    "produced_utc": "2026-08-28T12:40:54+00:00",
+    "prompt": "",
+    "seed": null,
+    "stem": "music",
+    "tool": "commons",
+    "tool_version": ""
+  },
+  "rights": {
+    "attribution_override": "",
+    "attribution_required": false,
+    "creator": "Fopseh",
+    "creator_url": "",
+    "modification_note": "",
+    "modified": false,
+    "retrieved_utc": "2026-08-28T12:40:54.398735+00:00",
+    "source_url": "https://commons.wikimedia.org/wiki/File%3ABach_Cello_Suite_1_Prelude_%28BWV_1007%29_Played_by_Chris.ogg",
+    "spdx_license": "CC0-1.0",
+    "title": "Bach Cello Suite 1 Prelude (BWV 1007) Played by Chris"
+  },
+  "selected": true,
+  "size_bytes": 8025732
+}

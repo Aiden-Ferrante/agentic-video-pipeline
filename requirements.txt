@@ -1,0 +1,4 @@
+doit==0.37.0
+mcp==2.0.0
+OpenTimelineIO==0.18.1
+pytest

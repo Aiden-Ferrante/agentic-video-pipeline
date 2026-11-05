@@ -1,0 +1,252 @@
+{
+  "tick": {
+    "source": "Cinematic Sound Design - System & UI Feedback Elements/Interface Sci-Fi Ping Down.wav",
+    "vendor": "Cinematic Sound Design",
+    "licence": "Sonniss GDC 2026 Game Audio Bundle \u2014 royalty-free, commercial, no attribution",
+    "retrieved": "2026-09-23",
+    "window": {
+      "start": null,
+      "seconds": 0.746
+    }
+  },
+  "data": {
+    "source": "Cinematic Sound Design - User Interface/Readout Thin Long.wav",
+    "vendor": "Cinematic Sound Design",
+    "licence": "Sonniss GDC 2026 Game Audio Bundle \u2014 royalty-free, commercial, no attribution",
+    "retrieved": "2026-09-23",
+    "window": {
+      "start": null,
+      "seconds": 4.341
+    }
+  },
+  "line": {
+    "source": "InMotionAudio - Arc/ELECArc_ArcPowerUpDesign04_InMotionAudio_Arc.wav",
+    "vendor": "InMotionAudio",
+    "licence": "Sonniss GDC 2026 Game Audio Bundle \u2014 royalty-free, commercial, no attribution",
+    "retrieved": "2026-09-23",
+    "window": {
+      "start": null,
+      "seconds": 2.5
+    }
+  },
+  "chime": {
+    "source": "Cinematic Sound Design - System & UI Feedback Elements/Interface Arp Reveal Down Long.wav",
+    "vendor": "Cinematic Sound Design",
+    "licence": "Sonniss GDC 2026 Game Audio Bundle \u2014 royalty-free, commercial, no attribution",
+    "retrieved": "2026-09-23",
+    "window": {
+      "start": null,
+      "seconds": 0.815
+    }
+  },
+  "tension": {
+    "source": "Cinematic Sound Design - Ultra Transitions & Impacts/Transition Braam Slow Dark Creepy.wav",
+    "vendor": "Cinematic Sound Design",
+    "licence": "Sonniss GDC 2026 Game Audio Bundle \u2014 royalty-free, commercial, no attribution",
+    "retrieved": "2026-09-23",
+    "window": {
+      "start": null,
+      "seconds": 3.592
+    }
+  },
+  "hit": {
+    "source": "344 Audio - Bass Drops & Downers Vol. 3/DSGNBass_Tone Downer (Reverb)_344 Audio_Bass Drops and Downers Vol 3.wav",
+    "vendor": "344 Audio",
+    "licence": "Sonniss GDC 2026 Game Audio Bundle \u2014 royalty-free, commercial, no attribution",
+    "retrieved": "2026-09-23",
+    "window": {
+      "start": null,
+      "seconds": 5.0
+    }
+  },
+  "swell": {
+    "source": "Epic Stock Media - Halloween Game - Haunted House and Horror Audio Scare Kit/UIAlert_Alert Designed Transition Swell Creature Strange Alien Layered 01_ESM_HALG.wav",
+    "vendor": "Epic Stock Media",
+    "licence": "Sonniss GDC 2026 Game Audio Bundle \u2014 royalty-free, commercial, no attribution",
+    "retrieved": "2026-09-23",
+    "window": {
+      "start": null,
+      "seconds": 4.0
+    }
+  },
+  "shimmer": {
+    "source": "Cinematic Sound Design - User Interface/Button Arp Twinkle.wav",
+    "vendor": "Cinematic Sound Design",
+    "licence": "Sonniss GDC 2026 Game Audio Bundle \u2014 royalty-free, commercial, no attribution",
+    "retrieved": "2026-09-23",
+    "window": {
+      "start": null,
+      "seconds": 1.425
+    }
+  },
+  "whoosh": {
+    "source": "Epic Stock Media - Elemental Mutation Whooshes and Impacts/ELECMisc_Impact Electric Tonal Deep Movement Motion Hiss Glitch 01_ESM_EMWI.wav",
+    "vendor": "Epic Stock Media",
+    "licence": "Sonniss GDC 2026 Game Audio Bundle \u2014 royalty-free, commercial, no attribution",
+    "retrieved": "2026-09-23",
+    "window": {
+      "start": null,
+      "seconds": 3.66
+    }
+  },
+  "glitch": {
+    "source": "The Noisery - Rich Glitch/UIGlitch_Designed_Glitch_Corrupted_Data Error_The Noisery_Rich Glitch_06.wav",
+    "vendor": "The Noisery",
+    "licence": "Sonniss GDC 2026 Game Audio Bundle \u2014 royalty-free, commercial, no attribution",
+    "retrieved": "2026-09-23",
+    "window": {
+      "start": null,
+      "seconds": 2.5
+    }
+  },
+  "robot": {
+    "source": "Epic Stock Media - Tower Defense Game/ROBTMvmt_Tower Deploy Hitech Robot Motor Dark Thump Servo Whine 04_ESM_TDG.wav",
+    "vendor": "Epic Stock Media",
+    "licence": "Sonniss GDC 2026 Game Audio Bundle \u2014 royalty-free, commercial, no attribution",
+    "retrieved": "2026-09-23",
+    "window": {
+      "start": null,
+      "seconds": 0.946
+    }
+  },
+  "craft": {
+    "source": "344 Audio - Air Designed/AEROJet_Unidentified Encounter_344 Audio_Air Designed.wav",
+    "vendor": "344 Audio",
+    "licence": "Sonniss GDC 2026 Game Audio Bundle \u2014 royalty-free, commercial, no attribution",
+    "retrieved": "2026-09-23",
+    "window": {
+      "start": null,
+      "seconds": 6.0
+    }
+  },
+  "rumble": {
+    "source": "Jake Fielding - Interior Wind Rain and Storms/THUN_Interior Thunder Rumble_JF_INT Storm_01.wav",
+    "vendor": "Jake Fielding",
+    "licence": "Sonniss GDC 2026 Game Audio Bundle \u2014 royalty-free, commercial, no attribution",
+    "retrieved": "2026-09-23",
+    "window": {
+      "start": null,
+      "seconds": 9.0
+    }
+  },
+  "braam": {
+    "source": "Jake Fielding - Cinematic Horn Braams/DSGNBram____Cinematic Horn Braam, Epic, Cinematic, Dark, Instrument, Huge-32.wav",
+    "vendor": "Jake Fielding",
+    "licence": "Sonniss GDC 2026 Game Audio Bundle \u2014 royalty-free, commercial, no attribution",
+    "retrieved": "2026-09-23",
+    "window": {
+      "start": null,
+      "seconds": 7.0
+    }
+  },
+  "burst": {
+    "source": "Epic Stock Media - Fantasy Game 2 - Sound Kit for Enchanted Realms/UIAlert_Collect Scifi Futuristic Electronic Bass Burst Sweep Heavy 04_ESM_FG2.wav",
+    "vendor": "Epic Stock Media",
+    "licence": "Sonniss GDC 2026 Game Audio Bundle \u2014 royalty-free, commercial, no attribution",
+    "retrieved": "2026-09-23",
+    "window": {
+      "start": null,
+      "seconds": 0.31
+    }
+  },
+  "reverse": {
+    "source": "Alexander Kopeikin - Emotion and Magic/magic, energy flow, astral travel-015.wav",
+    "vendor": "Alexander Kopeikin",
+    "licence": "Sonniss GDC 2026 Game Audio Bundle \u2014 royalty-free, commercial, no attribution",
+    "retrieved": "2026-09-23",
+    "window": {
+      "start": 4.0,
+      "seconds": 3.0
+    }
+  },
+  "wind": {
+    "source": "Epic Stock Media - Synthesized Nature Loops and Sounds/WINDInt_Loop Weather Wind Whipping Constricted Flow Turbulent 01_ESM_SNLS.wav",
+    "vendor": "Epic Stock Media",
+    "licence": "Sonniss GDC 2026 Game Audio Bundle \u2014 royalty-free, commercial, no attribution",
+    "retrieved": "2026-09-23",
+    "window": {
+      "start": 0.5,
+      "seconds": 5.0
+    }
+  },
+  "latch": {
+    "source": "Epic Stock Media - HD Lock And Mechanism Sound Design Kit/MECHLtch_Click Deep Mechanism Latch Button Nearfield Thunk 02_ESM_HDLM.wav",
+    "vendor": "Epic Stock Media",
+    "licence": "Sonniss GDC 2026 Game Audio Bundle \u2014 royalty-free, commercial, no attribution",
+    "retrieved": "2026-09-23",
+    "window": {
+      "start": null,
+      "seconds": 0.371
+    }
+  },
+  "arc": {
+    "source": "InMotionAudio - Arc/ELECArc_ArcDesign15_InMotionAudio_Arc.wav",
+    "vendor": "InMotionAudio",
+    "licence": "Sonniss GDC 2026 Game Audio Bundle \u2014 royalty-free, commercial, no attribution",
+    "retrieved": "2026-09-23",
+    "window": {
+      "start": null,
+      "seconds": 1.04
+    }
+  },
+  "glitch_hi": {
+    "source": "The Noisery - Rich Glitch/UIGlitch_User interface_Glitch_High_Electronic_The Noisery_Rich Glitch_05.wav",
+    "vendor": "The Noisery",
+    "licence": "Sonniss GDC 2026 Game Audio Bundle \u2014 royalty-free, commercial, no attribution",
+    "retrieved": "2026-09-23",
+    "window": {
+      "start": null,
+      "seconds": 0.8
+    }
+  },
+  "bubble": {
+    "source": "344 Audio - Elemental Palette Designed Vol. 1/WATRMisc_Water, Liquid Impact, Bubble, Sci Fi, Hit 04_344 Audio_Elemental Palette Designed Vol 1.wav",
+    "vendor": "344 Audio",
+    "licence": "Sonniss GDC 2026 Game Audio Bundle \u2014 royalty-free, commercial, no attribution",
+    "retrieved": "2026-09-23",
+    "window": {
+      "start": null,
+      "seconds": 1.097
+    }
+  },
+  "deny": {
+    "source": "Cinematic Sound Design - System & UI Feedback Elements/Interface Deny Low Fat Dark.wav",
+    "vendor": "Cinematic Sound Design",
+    "licence": "Sonniss GDC 2026 Game Audio Bundle \u2014 royalty-free, commercial, no attribution",
+    "retrieved": "2026-09-23",
+    "window": {
+      "start": null,
+      "seconds": 0.741
+    }
+  },
+  "bed": {
+    "source": "Cinematic Sound Design - Sci-Fi Drones/Roomtone Space Ship Interior Muted.wav",
+    "vendor": "Cinematic Sound Design",
+    "licence": "Sonniss GDC 2026 Game Audio Bundle \u2014 royalty-free, commercial, no attribution",
+    "retrieved": "2026-09-23",
+    "window": {
+      "start": 5.0,
+      "seconds": 60.0
+    }
+  },
+  "stone": {
+    "source": "Cinematic Sound Design - Interface & Infographics/Interface Accept Glassy Snap.wav",
+    "vendor": "Cinematic Sound Design",
+    "licence": "Sonniss GDC 2026 Game Audio Bundle \u2014 royalty-free, commercial, no attribution",
+    "retrieved": "2026-09-23",
+    "window": {
+      "start": null,
+      "seconds": 0.431
+    }
+  },
+  "title": {
+    "source": "Jake Fielding - Cinematic Horn Braams/DSGNBram____Cinematic Horn Braam, Epic, Cinematic, Dark, Instrument, Huge-67.wav",
+    "vendor": "Jake Fielding",
+    "licence": "Sonniss GDC 2026 Game Audio Bundle \u2014 royalty-free, commercial, no attribution",
+    "retrieved": "2026-09-23",
+    "window": {
+      "start": null,
+      "seconds": 8.0
+    }
+  }
+}

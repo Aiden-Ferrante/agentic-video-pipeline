@@ -1,0 +1,30 @@
+{
+  "id": "test-tone",
+  "library": "sound",
+  "note": "A synthesised drone, not music. It exists so the bed and ducking path can be exercised without pulling in a generative music model — every open-weights one (MusicGen, AudioGen, AudioLDM 2, Tango 2) ships CC-BY-NC weights. Replace with a real curated bed before publishing anything.",
+  "provenance": {
+    "digital_source_type": "algorithmicMedia",
+    "inputs": {
+      "filter": "sine=frequency=196:duration=20,aecho=0.8:0.9:1000:0.3,volume=0.35,tremolo=f=0.15:d=0.25"
+    },
+    "model": "",
+    "produced_utc": "2026-08-19T18:20:00+00:00",
+    "prompt": "",
+    "seed": null,
+    "tool": "ffmpeg",
+    "tool_version": "8.1.2"
+  },
+  "rights": {
+    "attribution_override": "",
+    "attribution_required": false,
+    "creator": "",
+    "creator_url": "",
+    "modification_note": "",
+    "modified": false,
+    "retrieved_utc": "2026-08-19T18:20:00+00:00",
+    "source_url": "",
+    "spdx_license": "CC0-1.0",
+    "title": "Test tone (synthesised)"
+  },
+  "selected": true
+}

@@ -1,0 +1,996 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Video pipeline — outer map</title>
+<link rel="stylesheet" href="fleet.css">
+<style>
+  /* Adopted onto fleet.css 2026-08-24, by ALIASING — the app's own names keep
+     working and the source of truth moves in one edit (fleet.css's own
+     prescription). Until then this page carried a private warm-cream palette
+     from before the contract existed: the one admin surface that read as a
+     different site.
+
+     The three actor hues below are PRODUCT IDENTITY — the canvas's whole
+     grammar is "coral = you, teal = agent, purple = shared artifact" — which
+     fleet.css explicitly leaves to the app. They are declared as oklch tokens
+     (the shipyard stage-colour pattern): mode-independent, since every surface
+     they tint is built with color-mix over the mode-aware neutrals. */
+  :root{
+    --bg:var(--fleet-bg); --panel:var(--fleet-surface); --panel2:var(--fleet-surface-2);
+    --line:var(--fleet-border); --ink:var(--fleet-text);
+    --dim:var(--fleet-text-dim); --faint:var(--fleet-text-faint);
+    --human: oklch(0.58 0.14 40);
+    --agent: oklch(0.58 0.12 170);
+    --pact:  oklch(0.58 0.15 285);
+    --edge: color-mix(in srgb, var(--fleet-text-faint) 75%, transparent);
+  }
+  *{box-sizing:border-box}
+  html{height:100%}
+  body{margin:0;min-height:100vh;background:var(--bg);color:var(--ink);
+    font-family:var(--fleet-font-sans);font-size:var(--fleet-text-body);
+    line-height:1.6;display:flex;flex-direction:column;overflow:hidden}
+  /* The header mirrors the fleet's tier-two proportions (min-height 49px,
+     brand at title size) without the tier-one app row: this page is a tool
+     inside video-pipeline, not a seventh app, and giving it the app tabs
+     would say otherwise. The link back to the Content tab is the seam. */
+  header{display:flex;align-items:baseline;gap:14px;padding:0 20px;
+    min-height:49px;border-bottom:1px solid var(--line);flex:0 0 auto;
+    background:var(--panel)}
+  h1{margin:0;font-size:var(--fleet-text-title);font-weight:600;
+    letter-spacing:-0.01em;line-height:49px;white-space:nowrap}
+  .sub{color:var(--faint);font-size:var(--fleet-text-meta);text-decoration:none}
+  a.sub:hover{color:var(--fleet-accent)}
+  .legend{margin-left:auto;display:flex;gap:16px;align-items:center;
+    font-size:var(--fleet-text-meta);color:var(--dim);flex-wrap:wrap}
+  .sw{display:inline-block;width:11px;height:11px;border-radius:3px;border:1px solid;vertical-align:-1px;margin-right:6px;
+    background:color-mix(in srgb, var(--c, var(--faint)) 14%, var(--panel));
+    border-color:color-mix(in srgb, var(--c, var(--faint)) 50%, transparent)}
+  .sw.dashed{background:transparent;border-style:dashed}
+  main{flex:1 1 auto;display:flex;min-height:0}
+  #left{flex:1 1 auto;display:flex;flex-direction:column;min-width:0}
+  /* The strips are the two levels the node graph cannot show: the WORK as an
+     ordered row of modules, and the MODULE as an ordered row of beats. Width
+     is proportional to duration, so the strips read as the film's actual
+     shape — a long beat looks long. */
+  #strips{flex:0 0 auto;border-top:1px solid var(--line);background:var(--panel);
+    padding:8px 14px 10px;display:flex;flex-direction:column;gap:6px}
+  .striprow{display:flex;align-items:center;gap:8px;min-height:24px}
+  .striplabel{flex:0 0 150px;font-size:var(--fleet-text-micro);color:var(--dim);
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:right}
+  .stripbody{flex:1 1 auto;display:flex;gap:2px;min-width:0;height:22px}
+  .seg{position:relative;border-radius:3px;cursor:pointer;min-width:6px;
+    border:1px solid transparent;overflow:hidden}
+  .seg .lbl{position:absolute;inset:0;display:flex;align-items:center;
+    justify-content:center;font-size:10px;color:var(--dim);pointer-events:none;
+    white-space:nowrap;overflow:hidden}
+  .seg.mod{background:color-mix(in srgb, var(--fleet-ok) 18%, var(--panel2))}
+  .seg.mod.mstale{background:color-mix(in srgb, var(--fleet-warn) 26%, var(--panel2))}
+  .seg.mod.mnone{background:var(--panel2)}
+  .seg.b-animation{background:color-mix(in srgb, var(--agent) 26%, var(--panel2))}
+  .seg.b-imagery{background:color-mix(in srgb, var(--pact) 26%, var(--panel2))}
+  .seg.b-none{background:var(--panel2)}
+  .seg.b-brief{background:repeating-linear-gradient(45deg,
+    color-mix(in srgb, var(--fleet-accent) 22%, var(--panel2)),
+    color-mix(in srgb, var(--fleet-accent) 22%, var(--panel2)) 4px, var(--panel2) 4px, var(--panel2) 8px)}
+  .seg.hole{background:repeating-linear-gradient(45deg, var(--panel2), var(--panel2) 4px,
+    transparent 4px, transparent 8px)}
+  .seg.bstale{border-color:var(--fleet-warn)}
+  .seg.cur{border-color:var(--fleet-accent);box-shadow:0 0 0 1px var(--fleet-accent)}
+  .seg:hover{filter:brightness(1.12)}
+  .seg:focus-visible{outline:2px solid var(--fleet-accent);outline-offset:1px}
+  .seg .pin{position:absolute;top:1px;right:2px;font-size:9px;color:var(--dim)}
+  #stage{flex:1 1 auto;position:relative;overflow:hidden;cursor:grab;touch-action:none;min-height:560px}
+  #stage.drag{cursor:grabbing}
+  #world{position:absolute;top:0;left:0;transform-origin:0 0}
+  #wires{position:absolute;top:0;left:0;overflow:visible;pointer-events:none}
+  /* Category classes set ONE custom property; every tinted surface — node
+     card, legend swatch, selection ring — derives from it with color-mix over
+     the mode-aware neutrals, so the identity hues need no dark-mode block.
+     Kept saturated on purpose: a desaturated pass was rejected on shipyard
+     ("hard to see"), and hue is this graph's whole grammar. */
+  .human{--c:var(--human)}
+  .agent{--c:var(--agent)}
+  .pact {--c:var(--pact)}
+  .neut {--c:var(--faint)}
+  .node{position:absolute;border:1px solid;border-radius:var(--fleet-radius-sm);
+    padding:9px 12px;cursor:pointer;color:var(--ink);
+    background:color-mix(in srgb, var(--c, var(--faint)) 14%, var(--panel));
+    border-color:color-mix(in srgb, var(--c, var(--faint)) 50%, transparent);
+    display:flex;flex-direction:column;justify-content:center;gap:2px;transition:transform .12s}
+  .node:hover{transform:translateY(-1px)}
+  .node .t{font-weight:600;font-size:var(--fleet-text-body);line-height:1.25}
+  .node .s{font-size:var(--fleet-text-meta);line-height:1.3;color:var(--dim)}
+  .node.sel{box-shadow:0 0 0 2px var(--bg),0 0 0 4px var(--c, var(--faint))}
+  .node:focus-visible{outline:2px solid var(--c, var(--faint));outline-offset:3px}
+  .node.door::after{content:"open ↗";position:absolute;bottom:5px;right:9px;
+    font-size:var(--fleet-text-micro);color:var(--faint)}
+  .later{background:transparent;border-style:dashed;
+    border-color:color-mix(in srgb, var(--faint) 60%, transparent);color:var(--dim)}
+  .later .s{color:var(--faint)}
+  .elabel{font-size:var(--fleet-text-micro);fill:var(--dim)}
+  /* Freshness speaks the fleet's semantic vocabulary — ok/warn/accent are
+     mode-independent oklch, so no dark block here either (the old palette
+     carried four hand-tuned dark variants for exactly these). Built with the
+     fleet-chip formula: hue text over a 12% wash of itself. */
+  .badge{position:absolute;top:-8px;right:-8px;height:19px;line-height:17px;border-radius:10px;
+    font-size:var(--fleet-text-micro);font-weight:500;padding:0 7px;border:1px solid;white-space:nowrap;
+    font-family:var(--fleet-font-mono);font-variant-numeric:tabular-nums}
+  .b-fresh{background:color-mix(in srgb, var(--fleet-ok) 12%, var(--panel));
+    border-color:color-mix(in srgb, var(--fleet-ok) 40%, transparent);color:var(--fleet-ok)}
+  .b-stale{background:color-mix(in srgb, var(--fleet-warn) 12%, var(--panel));
+    border-color:color-mix(in srgb, var(--fleet-warn) 40%, transparent);color:var(--fleet-warn)}
+  #pulse{font-size:var(--fleet-text-meta);color:var(--dim);display:flex;align-items:center;gap:7px}
+  #pulse b{font-weight:500;color:var(--ink);font-family:var(--fleet-font-mono);
+    font-variant-numeric:tabular-nums}
+  .dot{width:7px;height:7px;border-radius:50%;display:inline-block;background:var(--fleet-ok)}
+  .dot.stale{background:var(--fleet-warn)}
+  .dot.off{background:var(--faint)}
+  /* A build is running and holds the doit lock, so the graph on screen is a
+     moment stale rather than wrong. Pulsing says "moving" in the accent —
+     not the warn colour, which means something else here. */
+  .dot.busy{background:var(--fleet-accent);animation:breathe 1.4s ease-in-out infinite}
+  @keyframes breathe{0%,100%{opacity:1}50%{opacity:.35}}
+  @media (prefers-reduced-motion:reduce){.dot.busy{animation:none}}
+  #pick select{font:inherit;font-size:var(--fleet-text-meta);color:var(--ink);
+    background:var(--panel);border:1px solid var(--line);
+    border-radius:var(--fleet-radius-sm);padding:3px 6px}
+  #pick{display:inline-flex;align-items:center;gap:8px}
+  /* The project's rolled-up state, beside the module you are looking at. The
+     header already answers "which beat is stale"; this answers "how is the
+     whole work doing", which nothing on the page could say before. Hue is
+     load-bearing (ok/warn), so it is never greyed out to reduce density. */
+  .proj{font-size:var(--fleet-text-micro);color:var(--dim);white-space:nowrap}
+  .proj b{color:var(--ink);font-weight:600}
+  .proj .warn{color:var(--fleet-warn)}
+  aside{flex:0 0 330px;border-left:1px solid var(--line);background:var(--panel);padding:20px;overflow-y:auto}
+  aside h2{margin:0 0 2px;font-size:var(--fleet-text-title);font-weight:600;line-height:1.35}
+  .kind{font-size:var(--fleet-text-micro);letter-spacing:.3px;color:var(--faint);margin-bottom:16px}
+  .row{margin-bottom:15px}
+  .k{font-size:var(--fleet-text-micro);letter-spacing:.6px;text-transform:uppercase;color:var(--faint);margin-bottom:3px}
+  .v{font-size:var(--fleet-text-body);line-height:1.55}
+  /* Every task name, port and count is a machine fact — mono, per the fleet's
+     sans/mono split (PLATFORM.md §7). 0.94em because mono runs optically
+     larger than the sans at equal size. */
+  code{font-family:var(--fleet-font-mono);font-weight:400;font-size:0.94em;
+    line-height:1.5;background:var(--panel2);padding:1px 5px;
+    border-radius:4px;font-variant-numeric:tabular-nums}
+  .rule{border-left:2px solid var(--pact);padding:2px 0 2px 11px;
+    font-size:var(--fleet-text-meta);line-height:1.55;color:var(--dim)}
+  button.open{font:inherit;font-size:var(--fleet-text-meta);width:100%;
+    margin-bottom:10px;padding:9px 12px;background:var(--panel2);
+    color:var(--ink);border:1px solid var(--line);
+    border-radius:var(--fleet-radius-sm);cursor:pointer;
+    transition:border-color 120ms ease}
+  button.open:hover{border-color:var(--faint)}
+  /* Build is the primary act on a node; launching a viewer is secondary.
+     One solid-accent button per panel, everything else stays quiet. */
+  button#runbtn{background:var(--fleet-accent);border-color:var(--fleet-accent);
+    color:var(--fleet-on-accent)}
+  button#runbtn:hover{background:var(--fleet-accent-dim);border-color:var(--fleet-accent-dim)}
+  button.open:disabled{opacity:.55;cursor:default}
+  .openmsg{font-size:var(--fleet-text-meta);line-height:1.5;margin-bottom:14px;white-space:pre-line;color:var(--dim)}
+  .openmsg.bad{color:var(--fleet-danger)}
+  .tasks{margin-top:3px}
+  .task{display:flex;justify-content:space-between;gap:10px;padding:4px 0;
+    border-bottom:1px solid var(--line);font-size:var(--fleet-text-meta)}
+  .task:last-child{border-bottom:0}
+  .task code{background:none;padding:0;color:var(--dim)}
+  .s-fresh{color:var(--fleet-ok)} .s-stale{color:var(--fleet-warn)}
+  .tools{position:absolute;right:14px;bottom:14px;display:flex;gap:6px}
+  .tools button{font:inherit;font-size:var(--fleet-text-meta);background:var(--panel);color:var(--dim);
+    border:1px solid var(--line);border-radius:var(--fleet-radius-sm);padding:5px 11px;cursor:pointer}
+  .tools button:hover{color:var(--ink);border-color:var(--faint)}
+  @media (max-width:1100px){aside{flex:0 0 290px}}
+  @media (max-width:780px){
+    body{overflow:auto}
+    header{flex-wrap:wrap;row-gap:8px}
+    .legend{margin-left:0;flex-basis:100%}
+    main{flex-direction:column;min-height:0}
+    #stage{flex:0 0 auto;min-height:440px}
+    aside{flex:0 0 auto;border-left:0;border-top:1px solid var(--line);overflow:visible}
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>Video pipeline — outer map</h1>
+  <span class="sub">v3 · timeline as hub</span>
+  <a class="sub fleet-ext" id="hublink" href="#">content manager</a>
+  <div class="legend">
+    <span><i class="sw human"></i>you</span>
+    <span><i class="sw agent"></i>agent</span>
+    <span><i class="sw pact"></i>shared artifact</span>
+    <span><i class="sw dashed"></i>not built</span>
+    <span id="pick"></span>
+    <span id="pulse"><i class="dot off"></i>connecting…</span>
+  </div>
+</header>
+<script>
+/* The hub link resolves against whoever is READING: this page is browsed over
+   the tailnet too, where a literal localhost points at the reading machine —
+   same rule content-manager's fleet nav follows. */
+document.getElementById('hublink').href =
+  `${location.protocol}//${location.hostname}:8955`;
+</script>
+<main>
+  <div id="left">
+    <div id="stage">
+      <div id="world"><svg id="wires"></svg></div>
+      <div class="tools">
+        <button id="fit">Fit</button><button id="zin">+</button><button id="zout">−</button>
+      </div>
+    </div>
+    <div id="strips">
+      <div class="striprow"><span class="striplabel" id="plabel"></span><div class="stripbody" id="prow"></div></div>
+      <div class="striprow"><span class="striplabel" id="blabel"></span><div class="stripbody" id="brow"></div></div>
+    </div>
+  </div>
+  <aside id="panel"></aside>
+</main>
+<script>
+const NODES = [
+  { id:'script', kind:'human', t:'Script', s:'The vault screenplay, compiled',
+    x:360, y:40, w:240, h:64,
+    eats:'A textbook chapter and a premise, written in the vault as <code>**NARRATOR:**</code> / <code>**VIDEO:**</code> blocks (or a beat sheet).',
+    emits:'Beats in <code>shotlist.json</code>: the narration, the order and each beat’s <code>brief</code>. Bound by the shot list’s <code>script</code> field.',
+    rule:'The script owns the words, the order and the brief. It never touches a beat’s visual recipe — rewording a line re-times its picture and re-renders nothing.',
+    note:'Since 2026-09-01 (The Studio, rung 1) the screenplay compiles: <code>adopt</code> marks each block with its beat id once, then <code>compile</code> merges. A block with no marker becomes a brief card. Scrutiny is still cheapest here and more expensive at every step after it.' },
+
+  { id:'narration', kind:'agent', t:'Narration', s:'Scratch TTS now, your take later',
+    x:360, y:140, w:240, h:64,
+    eats:'<code>beats/&lt;id&gt;.vo.json</code>, and <code>voice/takes/&lt;beat&gt;.wav</code> if you have recorded one.',
+    emits:'<code>voice/&lt;beat&gt;.wav</code> plus <code>&lt;beat&gt;.align.json</code> — word-level timings.',
+    rule:'A real take always wins, by file precedence rather than a mode flag.',
+    note:'Amended 2026-08-19: scratch TTS is a first-class stage, so the whole edit can be built before anything is recorded. Kokoro by default; drop a sample at voice/reference.wav and Chatterbox clones your voice instead, so scratch timing matches the real read. This box has no microphone — takes are recorded elsewhere and copied in. Alignment is torchaudio forced_align with WAV2VEC2_ASR_BASE_960H (MIT; MMS_FA is CC-BY-NC).' },
+
+  { id:'shotlist', kind:'pact', t:'Shot list', s:'What to generate',
+    x:320, y:240, w:320, h:72,
+    eats:'<code>script.md</code> plus real durations from the recording.',
+    emits:'<code>beats/&lt;id&gt;.&lt;node&gt;.json</code> — one projection per generator.',
+    rule:'Each generator reads only its own slice. A new capability is a new field, never a new pathway.',
+    note:'Demoted in v3: this says what to GENERATE. The timeline says what the video IS. Fragments are split per beat and per node so rewording narration cannot re-render an animation.' },
+
+  { id:'animation', kind:'agent', t:'Animation', s:'Manim scene per beat',
+    x:40, y:360, w:180, h:68,
+    eats:'Beats where <code>visual.kind == "animation"</code>.',
+    emits:'<code>assets/&lt;beat&gt;.mp4</code>.',
+    rule:'One scene per beat. Never reads another generator’s output.',
+    note:'Runs on ManimCE 0.20.1 over the 55 scenes and scm_style.py carried out of v1, with caching off — manim hashes mobjects, not the scene file. Clips are then FITTED to their narration: VO duration is the contract, picture yields.' },
+
+  { id:'imagery', kind:'agent', t:'Imagery', s:'History beats only',
+    x:250, y:360, w:180, h:68,
+    eats:'Beats where <code>visual.kind == "imagery"</code>.',
+    emits:'<code>assets/&lt;beat&gt;.still.png</code> and a held <code>assets/&lt;beat&gt;.mp4</code>.',
+    rule:'Conditional. Period texture and thumbnail backplates — not b-roll. Rights are recorded at FETCH time or not at all.',
+    note:'Built 2026-08-19. Fetches keyless from Wikimedia Commons and NASA — the only sources needing no API key, and better here anyway: you want Euler\'s diagram, not a stock photo. A <code>query</code> searches and tells you what it picked; pin a <code>title</code> so the build stays reproducible. Local diffusers is available for backplates only.' },
+
+  { id:'brief', kind:'agent', t:'Brief cards', s:'Where the picture is still prose',
+    x:460, y:360, w:180, h:68,
+    eats:'Beats where <code>visual.kind == "brief"</code> — what the script compiler emits for a block with no recipe yet.',
+    emits:'<code>assets/&lt;beat&gt;.mp4</code>: a typeset card carrying the beat id, the section and the VIDEO direction, cut to the narration like any clip.',
+    rule:'A placeholder, never a picture. The card exists so the animatic BUILDS with its holes labelled; replacing it with a scene or a plate is the work.',
+    note:'Added 2026-09-01 with the script compiler. Rasterised with the thumbnail’s rsvg and looped with the fit node’s ffmpeg profile, so it costs no dependency. The count on this node is the number of holes left in the cut.' },
+
+  { id:'music', kind:'agent', t:'Music', s:'Beds from the library',
+    x:670, y:360, w:180, h:68,
+    eats:'A bed named in the shot list (<code>music</code> or legacy <code>sound</code> block), from <code>libraries/sound/</code>.',
+    emits:'<code>assets/_bed.wav</code> — a span clip on the music track, ducked under the narration at the master.',
+    rule:'A bed with no sidecar is REFUSED. Curate, never generate.',
+    note:'Built 2026-08-19. There is no local music model that is safe to ship: MusicGen, AudioGen, AudioLDM 2 and Tango 2 all pair permissive code with CC-BY-NC weights, and MIT inference does not launder NC weights. Ducking is sidechaincompress keyed off the voice, and loudness is measured once over the finished mix.' },
+
+  { id:'agent', kind:'agent', t:'Agent', s:'Edits OTIO',
+    x:90, y:500, w:170, h:60,
+    eats:'The timeline, as OTIO.',
+    emits:'A modified timeline.',
+    rule:'Operates on OTIO files. Never automates the editor’s GUI, and never builds.',
+    note:'Exposed over MCP as video-pipeline. Live: promote_timeline, retime, reorder, apply_polish(resync) and check_edit_drift, plus every read. Only derive_short still raises, blocked on the imagery node. Mutations refuse an unpromoted timeline, because the generated one is overwritten on the next build.' },
+
+  { id:'timeline', kind:'pact', t:'Timeline', s:'The product — everything derives from here',
+    x:320, y:490, w:320, h:80,
+    eats:'The shot list plus every rendered clip.',
+    emits:'<code>out/&lt;slug&gt;.otio</code> — clips carrying beat ids and narration.',
+    rule:'Generated freely until promoted. After promotion the pipeline never overwrites it.',
+    note:'The waist of the hourglass. An agent edits this file, you polish the same file in Kdenlive, and master, shorts and thumbnail all derive from it. Kdenlive 26.04 links libopentimelineio 0.18.1 — exactly what we write — so there is no adapter and no schema skew.' },
+
+  { id:'editor', kind:'human', t:'You', s:'Polish in Kdenlive',
+    x:700, y:500, w:170, h:60,
+    eats:'The timeline.',
+    emits:'The same timeline, hand-polished.',
+    rule:'Your window onto the file the agent is editing — not a second source of truth.',
+    note:'Kdenlive cannot take a .otio as an argument, so opening it lands you in the right folder and you import via Project → Import/Export → OpenTimelineIO Project.' },
+
+  { id:'master', kind:'neut', t:'Master', s:'One long video',
+    x:85, y:640, w:190, h:68,
+    eats:'The timeline.',
+    emits:'<code>out/master.mp4</code>.',
+    rule:'A master is not a release.',
+    note:'Fixed 2026-08-19: rendered FROM the authoritative timeline — the promoted edit when one exists. An agent retime and a Kdenlive polish now both reach the file you watch. Video is stream-copied where a clip is used whole; loudness is measured once over the whole narration, never per beat.' },
+
+  { id:'shorts', kind:'agent', t:'Shorts', s:'Contiguous beat ranges, re-rendered 9:16',
+    x:385, y:640, w:190, h:68,
+    eats:'A named beat range from the shot list.',
+    emits:'<code>out/shorts/&lt;name&gt;.mp4</code> at 1080x1920, captions burned in.',
+    rule:'Re-render, never crop. Selection is authored, never inferred.',
+    note:'Built 2026-08-19. A Manim scene is composed to its frame, so a 9:16 crop cuts the subject — it is re-rendered at the vertical resolution instead, and stills are re-letterboxed. Nothing here hunts for a good moment: every Shorts tool exists to infer structure from an unstructured podcast, and the shot list already has it. Captions are burned in because vertical video is watched muted.' },
+
+  { id:'thumbnail', kind:'agent', t:'Thumbnail', s:'Typography over a backplate',
+    x:685, y:640, w:190, h:68,
+    eats:'A title and an optional backplate beat.',
+    emits:'<code>out/thumbnail.png</code> at 1280x720.',
+    rule:'Text is set, never generated. Diffusion is allowed behind the words only.',
+    note:'Built 2026-08-19. Hand-written SVG rasterised with rsvg-convert out of the Manim env — no template engine, because the escaping has to be written by hand either way. The title is sized to what actually FITS: breaking on character count and then setting at a fixed size ran the first version straight off the canvas.' },
+
+  { id:'program', kind:'pact', t:'Program', s:'The whole work, composed',
+    x:85, y:760, w:190, h:64,
+    eats:'Every module\'s authoritative timeline, in the project\'s declared order.',
+    emits:'<code>out/projects/&lt;id&gt;.otio</code> — one flat track, module seams as markers.',
+    rule:'A view — rebuilt every time, read back by nobody. An edit that should stick goes home to the owning module.',
+    note:'Built 2026-08-25. Composes through each module\'s authoritative timeline, so a promoted hand edit is honoured at the project level the moment it exists. Clips are qualified <code>module/beat</code> because bare beat ids collide across modules. Audio is padded to the picture per module — the render is cut to the shorter track, so drift would silently eat the end of the film.' },
+
+  { id:'captions', kind:'agent', t:'Captions', s:'Subtitles from the alignments',
+    x:700, y:640, w:170, h:56,
+    eats:'The timeline plus every beat\'s <code>.align.json</code>.',
+    emits:'<code>out/&lt;slug&gt;.ass</code> and <code>.srt</code> — sidecars, never burned in here.',
+    rule:'Word timings come from a real alignment. A slug timed from the script gets no captions rather than captions invented from an estimate.',
+    note:'Promoted to its own node in the stems pass (2026-08-26) — captions were filed under publish, which made a stale caption read as a stale upload. The captions STEM stays a sidecar rather than an OTIO track: subtitle formats already carry their own timing, and burning is a delivery choice.' },
+
+  { id:'publish', kind:'human', t:'Publish', s:'Metadata generated, upload by hand',
+    x:360, y:760, w:240, h:64,
+    eats:'The master, the timeline and every sidecar.',
+    emits:'<code>out/publish.md</code> — title, description, chapters, credits, files.',
+    rule:'Generates the metadata. A person presses publish.',
+    note:'Built 2026-08-19. Chapters are timed against the TIMELINE, not the shot list, because a reorder moves every stamp after it. Credits are assembled from the licence recorded next to each asset, including the bed in the shared library. The description can be drafted by whichever local Ollama model is actually pulled — discovered, not hardcoded. Upload stays manual: YouTube needs OAuth, so there is no keyless path, and this is the last point a person sees the video first.' },
+];
+
+// Nodes with a door into an application. The server holds the real allowlist;
+// this only decides whether to draw the affordance.
+const OPENABLE = new Set(['timeline','master','program']);
+const OPENLABEL = {timeline:'Open in Kdenlive', master:'Play the master', program:'Open program in Kdenlive'};
+// Mirrors RUNNABLE in serve.py. Kept as a plain list because the server is the
+// one that enforces it — this only decides whether a button is drawn, and a
+// stale copy here can at worst offer a build the server then refuses.
+const RUNNABLE = new Set(['shotlist','animation','imagery','brief','narration','timeline',
+                          'music','captions','master','shorts','thumbnail','publish',
+                          'program']);
+
+const EDGES = [
+  {from:'script',    to:'narration', kind:'spine'},
+  {from:'narration', to:'shotlist',  kind:'spine'},
+  {from:'shotlist',  to:'animation', kind:'bus'},
+  {from:'shotlist',  to:'imagery',   kind:'bus'},
+  {from:'shotlist',  to:'brief',     kind:'bus'},
+  {from:'brief',     to:'timeline',  kind:'bus'},
+  {from:'shotlist',  to:'music',     kind:'bus'},
+  {from:'animation', to:'timeline',  kind:'bus'},
+  {from:'imagery',   to:'timeline',  kind:'bus'},
+  {from:'music',     to:'timeline',  kind:'bus'},
+  {from:'agent',     to:'timeline',  kind:'bi'},
+  {from:'timeline',  to:'editor',    kind:'bi'},
+  {from:'timeline',  to:'master',    kind:'bus'},
+  {from:'timeline',  to:'program',   kind:'bus'},
+  {from:'timeline',  to:'shorts',    kind:'bus'},
+  {from:'timeline',  to:'thumbnail', kind:'bus'},
+  {from:'master',    to:'publish',   kind:'bus'},
+  {from:'shorts',    to:'publish',   kind:'bus'},
+  {from:'thumbnail', to:'publish',   kind:'bus'},
+  {from:'timeline',  to:'captions',  kind:'bus'},
+  {from:'captions',  to:'publish',   kind:'bus'},
+];
+
+const KINDNAME = {human:'you run this', agent:'agent runs this', pact:'shared artifact',
+                  neut:'artifact', later:'not built yet'};
+const N = Object.fromEntries(NODES.map(n => [n.id, n]));
+const world = document.getElementById('world');
+const svg = document.getElementById('wires');
+const NS = 'http://www.w3.org/2000/svg';
+
+const W = 960, H = 880;
+svg.setAttribute('width', W); svg.setAttribute('height', H);
+world.style.width = W + 'px'; world.style.height = H + 'px';
+
+const defs = document.createElementNS(NS,'defs');
+defs.innerHTML = '<marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6"' +
+  ' orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.6"' +
+  ' stroke-linecap="round" stroke-linejoin="round"/></marker>';
+svg.appendChild(defs);
+
+const cx = n => n.x + n.w/2, bot = n => n.y + n.h, mid = n => n.y + n.h/2;
+
+function edgePath(e){
+  const a = N[e.from], b = N[e.to];
+  if (e.kind === 'spine') return `M${cx(a)} ${bot(a)} L${cx(b)} ${b.y}`;
+  if (e.kind === 'bi')    return `M${a.x + a.w} ${mid(a)} L${b.x} ${mid(b)}`;
+  const busY = bot(a) + (b.y - bot(a))/2;
+  return `M${cx(a)} ${bot(a)} L${cx(a)} ${busY} L${cx(b)} ${busY} L${cx(b)} ${b.y}`;
+}
+
+const wires = [];
+for (const e of EDGES){
+  const p = document.createElementNS(NS,'path');
+  p.setAttribute('d', edgePath(e));
+  p.setAttribute('fill','none');
+  p.setAttribute('stroke', 'var(--edge)');
+  p.setAttribute('stroke-width', 1.2);
+  p.setAttribute('stroke-linejoin','round');
+  p.setAttribute('marker-end','url(#ah)');
+  if (e.kind === 'bi') p.setAttribute('marker-start','url(#ah)');
+  svg.appendChild(p);
+  wires.push({e, p});
+}
+
+for (const n of NODES){
+  const d = document.createElement('div');
+  d.className = 'node ' + n.kind + (OPENABLE.has(n.id) ? ' door' : '');
+  d.style.cssText = `left:${n.x}px;top:${n.y}px;width:${n.w}px;height:${n.h}px`;
+  d.innerHTML = '<div class="t"></div><div class="s"></div>';
+  d.querySelector('.t').textContent = n.t;
+  d.querySelector('.s').textContent = n.s;
+  d.dataset.id = n.id;
+  // Plain divs are invisible to keyboard and assistive tech. These are the
+  // primary controls of the page, so they get a role, focus and Enter/Space.
+  d.setAttribute('role', 'button');
+  d.setAttribute('tabindex', '0');
+  d.setAttribute('aria-label', OPENABLE.has(n.id)
+    ? `${n.t} — ${n.s}. Opens ${OPENLABEL[n.id]}.` : `${n.t} — ${n.s}`);
+  d.addEventListener('keydown', ev => {
+    if (ev.key === 'Enter' || ev.key === ' '){
+      ev.preventDefault(); select(n.id);
+      if (ev.shiftKey && OPENABLE.has(n.id)) doOpen(n.id);
+    }
+  });
+  d.addEventListener('click', ev => { ev.stopPropagation(); select(n.id); });
+  // A door node opens on double-click too, so the timeline is reachable
+  // straight from the canvas without going via the panel.
+  d.addEventListener('dblclick', ev => {
+    ev.stopPropagation(); ev.preventDefault();
+    if (OPENABLE.has(n.id)){ select(n.id); doOpen(n.id); }
+  });
+  d.addEventListener('mouseenter', () => glow(n.id, true));
+  d.addEventListener('mouseleave', () => glow(n.id, false));
+  world.appendChild(d);
+}
+
+function glow(id, on){
+  for (const {e,p} of wires){
+    const hit = e.from === id || e.to === id;
+    p.setAttribute('stroke-width', hit && on ? 2.4 : 1.2);
+    p.setAttribute('opacity', on ? (hit ? 1 : .28) : 1);
+  }
+}
+
+const panel = document.getElementById('panel');
+let STATUS = {nodes:{}, videos:{}, wired:false};
+let selId = null;
+// The two strip payloads and which beat the panel is showing. DETAIL is the
+// module on screen (api/video), PDETAIL its owning project (api/project).
+let DETAIL = null, PDETAIL = null, selBeat = null;
+
+function blank(){
+  selId = null; selBeat = null;
+  document.querySelectorAll('.seg.beat').forEach(el => el.classList.remove('cur'));
+  panel.innerHTML = '<p class="v" style="color:var(--faint)">Click any node to read its contract. ' +
+    'Nodes marked <b>open ↗</b> are doors — double-click one, or use the button, to launch its application.</p>';
+}
+
+function statusRow(id){
+  const s = STATUS.nodes[id];
+  if (!s) return '';
+  const word = s.state === 'stale' ? `${s.stale} need rebuilding` : `${s.fresh} up to date`;
+  const items = s.detail.map(d =>
+    `<div class="task"><code>${d.task}</code><span class="s-${d.state}">${d.state}</span></div>`).join('');
+  return `<div class="row"><div class="k">State</div>` +
+         `<div class="v"><i class="dot ${s.state === 'stale' ? 'stale' : ''}"></i> ${word}</div>` +
+         `<div class="tasks">${items}</div></div>`;
+}
+
+// Which production the doors act on. Was `Object.keys(STATUS.videos)[0]`, which
+// is the first key of a dict built from SORTED TASK NAMES — i.e. always the
+// alphabetically-first video, so "Play the master" opened demo's master rather
+// than the one you were looking at. Harmless for a player, wrong for a build.
+// Seeded from ?slug= so the Content tab's production rows land here already
+// pointed at the right video; pick() discards it if it names nothing on disk.
+let curSlug = new URLSearchParams(location.search).get('slug');
+// ?project= scopes the canvas to ONE project's modules. content-manager owns
+// the registry and links in here that way: the hub answers "which work", this
+// page answers "which piece of it, and how is that piece built". Without the
+// param every project is listed, which is the standalone view.
+const curProject = new URLSearchParams(location.search).get('project');
+
+// Which project owns the module on screen. Derived from STATUS.projects rather
+// than tracked separately, so there is no second copy of membership to drift.
+function projectOf(slug){
+  return (STATUS.projects || []).find(p => p.modules.some(m => m.slug === slug));
+}
+
+function pick(){
+  const el = document.getElementById('pick');
+  let projs = STATUS.projects || [];
+  if (curProject){
+    const only = projs.filter(p => p.id === curProject);
+    // An unknown ?project= falls back to everything rather than to an empty
+    // bar: a stale link should cost you the scoping, not the page.
+    if (only.length) projs = only;
+  }
+  // Fall back to the flat slug list if the status server predates projects — an
+  // older server must degrade to the previous behaviour, not to a blank bar.
+  const list = projs.length ? projs.flatMap(p => p.modules.map(m => m.slug))
+                            : (STATUS.slugs || []);
+  if (!list.length){ el.innerHTML = ''; curSlug = null; return; }
+  // Default to the first module of the first REAL project. Fixtures are declared
+  // last on purpose: landing the canvas on a smoke test is how `demo` kept being
+  // mistaken for work in progress.
+  if (!list.includes(curSlug)){
+    const real = projs.find(p => p.id !== 'fixtures' && p.modules.length);
+    curSlug = real ? real.modules[0].slug : list[0];
+  }
+  const cur = projectOf(curSlug);
+  // Rebuilt on every 5s poll, so only touch the DOM when something changed —
+  // otherwise the select closes under the mouse while you are choosing.
+  // The project states are in the signature too: the badge must repaint when a
+  // module goes stale, even though the slug list itself has not moved.
+  // Separator is NUL because it cannot occur in a slug. Written as an escape,
+  // not as a raw byte — a literal 0x00 here classified this whole file as
+  // binary, which silently turned off grep across it.
+  const sig = list.join('\u0000') + '|' + curSlug + '|' + (curProject || '') + '|' +
+              projs.map(p => `${p.id}:${p.state}:${p.stale}`).join(',');
+  if (el.dataset.sig === sig) return;
+  el.dataset.sig = sig;
+
+  const label = m => (m.section ? m.section + '  ' : '') + m.slug +
+                     (m.state === 'missing' ? '  (no shot list)' : '');
+  const body = projs.length
+    ? projs.map(p =>
+        `<optgroup label="${p.title}">` +
+        p.modules.map(m =>
+          `<option value="${m.slug}"${m.slug === curSlug ? ' selected' : ''}` +
+          `${m.state === 'missing' ? ' disabled' : ''}>${label(m)}</option>`
+        ).join('') + '</optgroup>').join('')
+    : list.map(s => `<option${s === curSlug ? ' selected' : ''}>${s}</option>`).join('');
+
+  let badge = '';
+  if (cur){
+    const n = cur.modules.length;
+    // "none" is not "fresh": a project whose modules carry no tasks at all has
+    // never been built, and must not read as green.
+    const state = cur.state === 'stale'
+      ? `<span class="warn">${cur.stale} stale</span>`
+      : cur.state === 'none' ? 'not built' : 'up to date';
+    badge = `<span class="proj"><b>${cur.title}</b> · ${n} module${n > 1 ? 's' : ''} · ${state}</span>`;
+  }
+  el.innerHTML = '<select id="slugsel" aria-label="Production">' + body + '</select>' + badge;
+  el.querySelector('#slugsel').onchange = e => {
+    curSlug = e.target.value; el.dataset.sig = '';
+    loadStrips();
+    // Repaint the badge NOW, not on the next 5s poll. Without this the header
+    // names the project you just navigated away FROM for up to five seconds —
+    // switching to a fixture still read "Logic". Safe to rebuild here because
+    // the dropdown has already closed by the time change fires, so this cannot
+    // be the churn the signature guard exists to prevent.
+    pick();
+    if (selId) select(selId);
+  };
+}
+
+// Last result per (kind, node, slug). The status poll re-renders this panel
+// every 5s, so a message that is not replayed is wiped before it can be read —
+// a defect already found once on the open door, by clicking rather than curling.
+// Keyed by slug too: a result for `demo` must not surface under `origins`.
+const lastMsg = {};
+const msgKey = (kind, id) => `${kind}:${id}:${curSlug}`;
+
+// The program node acts on the WORK, not the module on screen — its target is
+// the owning project's id, resolved at call time so switching modules inside
+// one project never changes what the button does.
+function targetFor(id){
+  if (id !== 'program') return curSlug;
+  const proj = projectOf(curSlug);
+  return proj ? proj.id : null;
+}
+
+async function post(kind, url, id, verb, beat){
+  // A per-beat run keys its message the same way the beat panel replays it —
+  // `run:animation:b19:<slug>` — or the result is wiped on the next poll,
+  // written under one key and read back under another.
+  const key = msgKey(kind, beat ? `${id}:${beat}` : id);
+  const say = (text, cls) => {
+    lastMsg[key] = {msg:text, cls};
+    const m = document.getElementById(kind + 'msg');
+    if (m){ m.textContent = text; m.className = cls; }
+  };
+  const btn = document.getElementById(kind + 'btn');
+  if (btn) btn.disabled = true;
+  say(verb, 'openmsg');
+  try{
+    const target = targetFor(id);
+    if (!target) throw new Error('no production selected');
+    const body = {node:id, slug:target};
+    if (beat) body.beat = beat;
+    const r = await fetch(url, {method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify(body)});
+    const d = await r.json();
+    say(d.message, 'openmsg' + (d.ok ? '' : ' bad'));
+  }catch(e){
+    say('could not reach the status server', 'openmsg bad');
+  }
+  if (btn) btn.disabled = false;
+  refresh();   // pick up `building` immediately rather than up to 5s later
+}
+
+const doOpen = id => post('open', 'api/open', id, 'launching…');
+const doRun  = (id, beat) => post('run', 'api/run', id, 'starting build…', beat);
+
+function replay(kind, id){
+  const m = lastMsg[msgKey(kind, id)];
+  return `<div class="${m ? m.cls : 'openmsg'}" id="${kind}msg">` +
+         `${m ? m.msg : ''}</div>`;
+}
+
+// Which registry `tools` key speaks for which canvas node. Display only —
+// nothing resolves a tool from the registry yet, and the row says so.
+const TOOLKEY = {animation:'visuals.animation', imagery:'visuals.imagery',
+                 narration:'narration', music:'music', captions:'captions',
+                 editor:'edit', master:'assemble', shotlist:'timing'};
+
+function toolRow(id){
+  const proj = projectOf(curSlug);
+  // A dotted key ('visuals.animation') walks the nested block; the flat
+  // legacy spellings keep working because the resolver aliases them.
+  let t = proj && proj.tools;
+  for (const part of (TOOLKEY[id] || '').split('.')) t = t && t[part];
+  if (t === undefined && proj && proj.tools) {
+    const legacy = {'visuals.animation':'animation','visuals.imagery':'imagery',
+                    'narration':'voice','music':'sound'};
+    t = proj.tools[legacy[TOOLKEY[id]]];
+  }
+  if (!t) return '';
+  return `<div class="row"><div class="k">Tool</div>` +
+         `<div class="v"><code>${t}</code> <span style="color:var(--faint)">` +
+         `resolved from ${proj.id}.json</span></div></div>`;
+}
+
+// The timeline node carries the one fact the graph cannot draw: WHOSE cut
+// governs. Promoted means the hand-owned edit wins and the pipeline will not
+// overwrite it; drift is checked on demand because it hashes every clip.
+function cutRow(id){
+  if (id !== 'timeline' || !DETAIL || !DETAIL.exists) return '';
+  const owned = DETAIL.promoted;
+  return `<div class="row"><div class="k">Cut</div><div class="v">` +
+         (owned
+           ? `<b>hand-owned</b> — ${DETAIL.timeline} governs; the pipeline will not overwrite it. ` +
+             `<button class="open" id="driftbtn" style="margin-top:6px">Check drift</button>` +
+             // Replayed from lastMsg like every other result: the panel is
+             // rebuilt on each 5s poll, and a message that is not replayed is
+             // wiped before it can be read — the open door found this first.
+             `<div class="${(lastMsg['drift:' + curSlug] || {}).cls || 'openmsg'}" id="driftmsg">` +
+             `${(lastMsg['drift:' + curSlug] || {}).msg || ''}</div>`
+           : `generated — rebuilt freely. Promote (via the MCP seam) to hand-own the cut.`) +
+         `</div></div>`;
+}
+
+// The script node shows its binding and what a compile would change. Fetched
+// on select, cached per slug, so the 5s poll re-render does not flicker or
+// re-read the vault; cleared after a compile so the next look is honest.
+const SCRIPT = {};
+function scriptRow(id){
+  if (id !== 'script') return '';
+  const b = DETAIL && DETAIL.script;
+  let v;
+  if (!DETAIL || !DETAIL.exists) v = '';
+  else if (!b || !b.bound)
+    v = `<span style="color:var(--faint)">not bound — add <code>"script": "&lt;vault-relative path&gt;"</code> to shotlist.json</span>`;
+  else if (!b.exists)
+    v = `<code>${b.path}</code> <span class="warn">— not found under the vault</span>`;
+  else {
+    const d = SCRIPT[curSlug];
+    const diff = !d ? '<span style="color:var(--faint)">reading…</span>'
+      : !d.ok ? `<span class="warn">${d.message}</span>`
+      : (d.added.length + d.changed.length + d.orphaned.length === 0 && !d.reordered)
+        ? 'in sync — the shot list matches the script'
+        : [d.added.length ? `<b>${d.added.length}</b> new beat(s) → brief cards` : '',
+           d.changed.length ? `<b>${d.changed.length}</b> reworded` : '',
+           d.reordered ? 'order changed' : '',
+           d.orphaned.length ? `<b>${d.orphaned.length}</b> orphan(s) (kept)` : ''
+          ].filter(Boolean).join(' · ');
+    v = `<code>${b.path}</code><div style="margin-top:6px">${diff}</div>` +
+        `<button class="open" id="compilebtn" style="margin-top:6px">Compile script into shot list</button>` +
+        replay('compile', id);
+  }
+  return v ? `<div class="row"><div class="k">Bound to</div><div class="v">${v}</div></div>` : '';
+}
+async function loadScript(){
+  const slug = curSlug;
+  try{ SCRIPT[slug] = await (await fetch('api/script/' + slug, {cache:'no-store'})).json(); }
+  catch(e){ SCRIPT[slug] = {ok:false, message:'could not reach the status server'}; }
+  if (selId === 'script' && curSlug === slug) select('script');
+}
+
+// Which style the module wears, on the nodes whose defaults it supplies.
+function styleRow(id){
+  if (!['shotlist','script','narration','music','master'].includes(id)) return '';
+  if (!DETAIL || !DETAIL.exists) return '';
+  const s = DETAIL.style;
+  const v = !s ? '<span style="color:var(--faint)">none — the shot list carries every block itself</span>'
+          : `<code>${s.id}</code>${s.version != null ? ' v' + s.version : ''} — ${s.title} ` +
+            `<span style="color:var(--faint)">from the ${s.source}</span>` +
+            (s.exists ? '' : ' <span class="warn">— file missing; building from the shot list alone</span>');
+  return `<div class="row"><div class="k">Style</div><div class="v">${v}</div></div>`;
+}
+
+function select(id){
+  selId = id; selBeat = null;
+  document.querySelectorAll('.seg.beat').forEach(el => el.classList.remove('cur'));
+  const n = N[id];
+  document.querySelectorAll('.node').forEach(el => el.classList.toggle('sel', el.dataset.id === id));
+  const row = (k,v) => v ? `<div class="row"><div class="k">${k}</div><div class="v">${v}</div></div>` : '';
+  const target = targetFor(id);
+  panel.innerHTML =
+    `<h2>${n.t}</h2><div class="kind">${KINDNAME[n.kind]}</div>` +
+    (RUNNABLE.has(id)
+      ? `<button class="open" id="runbtn">Build ${n.t.toLowerCase()}` +
+        `${target ? ` for ${target}` : ''}</button>` +
+        replay('run', id)
+      : '') +
+    (OPENABLE.has(id)
+      ? `<button class="open" id="openbtn">${OPENLABEL[id]}</button>` +
+        replay('open', id)
+      : '') +
+    statusRow(id) + cutRow(id) + toolRow(id) + styleRow(id) + scriptRow(id) +
+    row('Eats', n.eats) + row('Emits', n.emits) +
+    (n.rule ? `<div class="row"><div class="k">Rule</div><div class="rule">${n.rule}</div></div>` : '') +
+    row('Why', n.note);
+  const ob = document.getElementById('openbtn');
+  if (ob) ob.onclick = () => doOpen(id);
+  const rb = document.getElementById('runbtn');
+  if (rb) rb.onclick = () => doRun(id);
+  if (id === 'script' && DETAIL && DETAIL.script && DETAIL.script.exists && !SCRIPT[curSlug]) loadScript();
+  const cb = document.getElementById('compilebtn');
+  if (cb) cb.onclick = async () => {
+    cb.disabled = true;
+    delete SCRIPT[curSlug];
+    await post('compile', 'api/compile', 'script', 'compiling…');
+    loadStrips(); loadScript();
+  };
+  const db = document.getElementById('driftbtn');
+  if (db) db.onclick = async () => {
+    const key = 'drift:' + curSlug;
+    const say = (msg, cls) => {
+      lastMsg[key] = {msg, cls};
+      const m = document.getElementById('driftmsg');
+      if (m){ m.textContent = msg; m.className = cls; }
+    };
+    db.disabled = true; say('hashing every clip…', 'openmsg');
+    try{
+      const d = await (await fetch('api/drift/' + curSlug, {cache:'no-store'})).json();
+      if (d.drifted && d.drifted.length)
+        say(`${d.drifted.length} clip(s) re-rendered since promotion: ${d.drifted.join(', ')} — the edit references media it never saw.`, 'openmsg bad');
+      else
+        say(`no drift — all ${d.checked} clips match their promoted hashes.`, 'openmsg');
+    }catch(e){ say('drift check failed', 'openmsg bad'); }
+    const b = document.getElementById('driftbtn');
+    if (b) b.disabled = false;
+  };
+}
+
+// ---------- beat detail: the panel for one piece of the module ----------
+function selectBeat(bid){
+  selBeat = bid; selId = null;
+  document.querySelectorAll('.node').forEach(el => el.classList.remove('sel'));
+  document.querySelectorAll('.seg.beat').forEach(el =>
+    el.classList.toggle('cur', el.dataset.beat === bid));
+  const b = (DETAIL && DETAIL.beats || []).find(x => x.id === bid);
+  if (!b){ blank(); return; }
+  const row = (k,v) => v ? `<div class="row"><div class="k">${k}</div><div class="v">${v}</div></div>` : '';
+  const genNode = b.kind === 'imagery' ? 'imagery'
+                : b.kind === 'animation' ? 'animation'
+                : b.kind === 'brief' ? 'brief' : null;
+  const tasks = Object.entries(b.tasks).map(([g, st]) =>
+    `<div class="task"><code>${g}:${curSlug}/${bid}</code><span class="s-${st}">${st}</span></div>`).join('');
+  panel.innerHTML =
+    `<h2>${curSlug} / ${bid}</h2><div class="kind">one beat</div>` +
+    (genNode
+      ? `<button class="open" id="runbtn">Rebuild this beat (${genNode})</button>` +
+        replay('run', genNode + ':' + bid)
+      : '') +
+    row('Visual', (b.kind === 'brief' ? '<b>brief</b> — a placeholder card; the picture is still prose' : b.kind) +
+                  (b.locked ? ' · <b>locked</b> — the generator reuses what is on disk' : '')) +
+    row('Brief', b.brief ? `<span style="color:var(--dim)">${b.brief}</span>` : '') +
+    row('Section', b.section || '') +
+    row('Length', b.seconds != null ? b.seconds.toFixed(2) + 's on the timeline'
+                                    : 'not placed — no fitted clip yet') +
+    (b.stale ? `<div class="row"><div class="k">State</div><div class="v"><i class="dot stale"></i> stale — a rebuild would change it</div></div>` : '') +
+    (tasks ? `<div class="row"><div class="k">Tasks</div><div class="tasks">${tasks}</div></div>` : '') +
+    row('Narration', b.vo_text ? `<span style="color:var(--dim)">${b.vo_text}</span>` : '<span style="color:var(--faint)">none — held for its picture only</span>');
+  const rb = document.getElementById('runbtn');
+  if (rb) rb.onclick = () => doRun(genNode, bid);
+}
+blank();
+
+function fmtMin(sec){
+  const m = Math.floor(sec/60);
+  return m ? `${m}m${String(Math.round(sec%60)).padStart(2,'0')}s` : `${sec.toFixed(1)}s`;
+}
+
+function strips(){
+  const prow = document.getElementById('prow'), brow = document.getElementById('brow');
+  const plabel = document.getElementById('plabel'), blabel = document.getElementById('blabel');
+  const proj = projectOf(curSlug);
+
+  // Project row: the work as an ordered row of modules, widths ∝ runtime.
+  let phtml = '', plab = '';
+  if (PDETAIL && PDETAIL.exists && proj){
+    const tot = PDETAIL.seconds || 0;
+    plab = `${PDETAIL.title} · ${fmtMin(tot)}`;
+    phtml = PDETAIL.modules.map(m => {
+      const st = (proj.modules.find(x => x.slug === m.slug) || {}).state || 'none';
+      const w = tot ? Math.max(2, (m.seconds || 0)/tot*100) : 100/PDETAIL.modules.length;
+      return `<div class="seg mod ${st === 'stale' ? 'mstale' : st === 'none' ? 'mnone' : ''}` +
+        `${m.slug === curSlug ? ' cur' : ''}" role="button" tabindex="0" data-slug="${m.slug}"` +
+        ` style="flex:0 0 ${w}%" title="${(m.section ? m.section + ' ' : '') + m.slug} · ` +
+        `${m.seconds != null ? fmtMin(m.seconds) : 'no timeline'}${m.promoted ? ' · hand-owned' : ''}` +
+        `${st === 'stale' ? ' · STALE' : ''}">` +
+        `<span class="lbl">${m.section || m.slug}</span>` +
+        `${m.promoted ? '<span class="pin">✎</span>' : ''}</div>`;
+    }).join('');
+  }
+
+  // Beat row: the module as an ordered row of beats. An authored-but-unplaced
+  // beat renders as a hatched hole — it must show as a gap, never vanish.
+  let bhtml = '', blab = curSlug || '';
+  if (DETAIL && DETAIL.exists){
+    const tot = DETAIL.seconds || 0;
+    blab = `${DETAIL.slug} · ${fmtMin(tot)} · ${DETAIL.beats.length} beats` +
+           (DETAIL.promoted ? ' · hand-owned' : '');
+    bhtml = DETAIL.beats.map(b => {
+      const w = (b.seconds != null && tot) ? Math.max(1.2, b.seconds/tot*100) : 1.6;
+      const title = `${b.id} · ${b.seconds != null ? b.seconds.toFixed(1) + 's' : 'not placed'}` +
+        ` · ${b.kind}${b.stale ? ' · STALE' : ''}${b.locked ? ' · locked' : ''}` +
+        (b.vo_text ? '\n' + b.vo_text.slice(0, 160) : '');
+      return `<div class="seg beat b-${b.kind}${b.placed ? '' : ' hole'}` +
+        `${b.stale ? ' bstale' : ''}${b.id === selBeat ? ' cur' : ''}"` +
+        ` role="button" tabindex="0" data-beat="${b.id}" style="flex:0 0 ${w}%"` +
+        ` title="${title.replace(/"/g, '&quot;')}">` +
+        `${b.locked ? '<span class="pin">🔒</span>' : ''}</div>`;
+    }).join('');
+  }
+
+  // Only touch the DOM when the content moved — the strips repaint on every
+  // poll, and rebuilding them under the mouse kills hover and focus.
+  const sig = plab + '\u0000' + phtml + '\u0000' + blab + '\u0000' + bhtml;
+  if (prow.dataset.sig === sig) return;
+  prow.dataset.sig = sig;
+  plabel.textContent = plab; prow.innerHTML = phtml;
+  blabel.textContent = blab; brow.innerHTML = bhtml;
+
+  const go = slug => {
+    curSlug = slug;
+    document.getElementById('pick').dataset.sig = '';
+    pick(); loadStrips();
+    if (selId) select(selId); else blank();
+  };
+  prow.querySelectorAll('.seg').forEach(el => {
+    el.onclick = () => go(el.dataset.slug);
+    el.onkeydown = e => { if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); go(el.dataset.slug); } };
+  });
+  brow.querySelectorAll('.seg').forEach(el => {
+    el.onclick = () => selectBeat(el.dataset.beat);
+    el.onkeydown = e => { if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); selectBeat(el.dataset.beat); } };
+  });
+}
+
+async function loadStrips(){
+  if (!curSlug){ DETAIL = null; PDETAIL = null; strips(); return; }
+  const slug = curSlug;
+  try{
+    const d = await (await fetch('api/video/' + slug, {cache:'no-store'})).json();
+    if (slug === curSlug) DETAIL = d;   // a stale response must not paint the wrong module
+  }catch(e){}
+  const proj = projectOf(curSlug);
+  if (proj){
+    try{ PDETAIL = await (await fetch('api/project/' + proj.id, {cache:'no-store'})).json(); }
+    catch(e){}
+  } else PDETAIL = null;
+  strips();
+}
+
+function paint(){
+  pick();
+  loadStrips();
+  for (const el of document.querySelectorAll('.node')){
+    const s = STATUS.nodes[el.dataset.id];
+    let b = el.querySelector('.badge');
+    if (!s){ if (b) b.remove(); continue; }
+    if (!b){ b = document.createElement('div'); el.appendChild(b); }
+    const stale = s.state === 'stale';
+    b.className = 'badge ' + (stale ? 'b-stale' : 'b-fresh');
+    b.textContent = stale ? `${s.stale} stale` : `${s.fresh} ✓`;
+  }
+  const wired = Object.keys(STATUS.nodes).length;
+  const stale = Object.values(STATUS.nodes).filter(n => n.state === 'stale').length;
+  const pulse = document.getElementById('pulse');
+  // Order matters. A build we started is named; a build someone else started is
+  // `health: busy` and can only be described; only then do the counts mean
+  // anything. Without the busy branch the page blanked itself for the whole of
+  // every build — the one time you are actually watching it.
+  // A FAILED run outranks all of it: an exit code nobody surfaces is how you
+  // sit waiting for a render that died forty seconds in.
+  const run = STATUS.run || {};
+  pulse.innerHTML =
+    run.active
+      ? `<i class="dot busy"></i>building <b>${run.task}</b> — ${Math.round(run.seconds)}s`
+    : (run.task && run.ok === false)
+      ? `<i class="dot stale"></i><b>${run.task}</b> failed (exit ${run.exit})`
+    : STATUS.health === 'busy'
+      ? '<i class="dot busy"></i>building — graph as of last read'
+    : STATUS.wired
+      ? `<i class="dot ${stale ? 'stale' : ''}"></i>${stale ? `<b>${stale}</b> node${stale>1?'s':''} stale`
+          : `<b>${wired}</b> nodes up to date`}`
+      : '<i class="dot off"></i>pipeline not wired';
+  if (selId) select(selId);
+  else if (selBeat) selectBeat(selBeat);
+}
+
+async function refresh(){
+  try{
+    const r = await fetch('api/status', {cache:'no-store'});
+    if (!r.ok) throw new Error(r.status);
+    STATUS = await r.json();
+  }catch(e){
+    STATUS = {nodes:{}, videos:{}, wired:false};
+    document.getElementById('pulse').innerHTML = '<i class="dot off"></i>no status server — static view';
+    return;
+  }
+  paint();
+}
+refresh();
+setInterval(refresh, 5000);
+
+let z = 1, ox = 0, oy = 0, tries = 0, touched = false;
+const stage = document.getElementById('stage');
+const apply = () => world.style.transform = `translate(${ox}px,${oy}px) scale(${z})`;
+function fit(){
+  const r = stage.getBoundingClientRect();
+  if ((r.width < 2 || r.height < 2) && tries++ < 60){ requestAnimationFrame(fit); return; }
+  if (r.width < 2 || r.height < 2){ z = 1; ox = 0; oy = 0; apply(); return; }
+  z = Math.max(.3, Math.min((r.width - 48) / W, (r.height - 48) / H, 1.4));
+  ox = (r.width - W*z)/2; oy = (r.height - H*z)/2;
+  apply();
+}
+// The stage resizes for reasons that fire no window resize event — the panel
+// growing, the header reflowing. Without this the scale silently goes stale.
+new ResizeObserver(() => { if (!touched) fit(); }).observe(stage);
+
+let down = false, px = 0, py = 0;
+stage.addEventListener('pointerdown', e => {
+  // Only begin a pan when the press lands on empty canvas. Capturing the
+  // pointer for a press that started on a node retargets the subsequent click
+  // to the stage, so the node's own handler never fires and nothing selects.
+  if (e.target.closest('.node')) return;
+  down = true; px = e.clientX; py = e.clientY;
+  stage.classList.add('drag'); stage.setPointerCapture(e.pointerId);
+  document.querySelectorAll('.node').forEach(el=>el.classList.remove('sel'));
+  blank();
+});
+stage.addEventListener('pointermove', e => {
+  if(!down) return; touched = true;
+  ox += e.clientX - px; oy += e.clientY - py; px = e.clientX; py = e.clientY; apply();
+});
+stage.addEventListener('pointerup', () => { down = false; stage.classList.remove('drag'); });
+stage.addEventListener('wheel', e => {
+  e.preventDefault(); touched = true;
+  const r = stage.getBoundingClientRect(), mx = e.clientX - r.left, my = e.clientY - r.top;
+  const nz = Math.min(2.2, Math.max(.3, z * (e.deltaY < 0 ? 1.1 : 1/1.1)));
+  ox = mx - (mx - ox) * (nz/z); oy = my - (my - oy) * (nz/z); z = nz; apply();
+}, {passive:false});
+document.getElementById('fit').onclick = () => { touched = false; fit(); };
+document.getElementById('zin').onclick = () => { touched = true; z = Math.min(2.2, z*1.15); apply(); };
+document.getElementById('zout').onclick = () => { touched = true; z = Math.max(.3, z/1.15); apply(); };
+addEventListener('resize', () => { if (!touched) fit(); });
+addEventListener('keydown', e => { if(e.key === 'Escape'){
+  document.querySelectorAll('.node').forEach(el=>el.classList.remove('sel')); blank(); } });
+fit();
+</script>
+</body>
+</html>

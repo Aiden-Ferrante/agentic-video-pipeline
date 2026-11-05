@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gen Lab — video pipeline</title>
+<link rel="stylesheet" href="fleet.css">
+<style>
+  /* Adopted onto fleet.css by ALIASING, same as the canvas: the app's own
+     names keep working and the source of truth moves in one edit. The canvas's
+     actor grammar (coral = you, teal = agent) carries over — everything the lab
+     produces is agent work, and the one coral affordance is the commit, which
+     is the only place a human decision is recorded. */
+  :root{
+    --bg:var(--fleet-bg); --panel:var(--fleet-surface); --panel2:var(--fleet-surface-2);
+    --line:var(--fleet-border); --ink:var(--fleet-text);
+    --dim:var(--fleet-text-dim); --faint:var(--fleet-text-faint);
+    --human: oklch(0.58 0.14 40);
+    --agent: oklch(0.58 0.12 170);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;min-height:100vh;background:var(--bg);color:var(--ink);
+    font-family:var(--fleet-font-sans);font-size:var(--fleet-text-body);line-height:1.6}
+  header{display:flex;align-items:baseline;gap:14px;padding:0 20px;min-height:49px;
+    border-bottom:1px solid var(--line);background:var(--panel);position:sticky;top:0;z-index:5}
+  header h1{font-size:var(--fleet-text-title);margin:0;font-weight:600}
+  header .sub{color:var(--dim);font-size:var(--fleet-text-small)}
+  header .spacer{flex:1}
+  .pill{font-size:var(--fleet-text-small);padding:2px 9px;border-radius:999px;
+    border:1px solid var(--line);color:var(--dim)}
+  .pill.up{color:var(--agent);border-color:color-mix(in srgb,var(--agent) 45%,transparent)}
+  .pill.down{color:var(--human);border-color:color-mix(in srgb,var(--human) 45%,transparent)}
+  main{padding:18px 20px 60px;max-width:1500px;margin:0 auto}
+  .row{display:flex;gap:14px;flex-wrap:wrap;align-items:flex-end;margin-bottom:14px}
+  label{display:flex;flex-direction:column;gap:4px;font-size:var(--fleet-text-small);color:var(--dim)}
+  select,input,textarea,button{font:inherit;background:var(--panel2);color:var(--ink);
+    border:1px solid var(--line);border-radius:7px;padding:7px 9px}
+  textarea{width:100%;min-height:78px;resize:vertical;line-height:1.5}
+  button{cursor:pointer}
+  button:hover:not(:disabled){border-color:var(--agent)}
+  button:disabled{opacity:.45;cursor:not-allowed}
+  button.go{background:color-mix(in srgb,var(--agent) 18%,var(--panel2));
+    border-color:color-mix(in srgb,var(--agent) 55%,transparent);font-weight:600}
+  button.commit{background:color-mix(in srgb,var(--human) 18%,var(--panel2));
+    border-color:color-mix(in srgb,var(--human) 55%,transparent)}
+  .tabs{display:flex;gap:6px;margin-bottom:14px}
+  .tabs button{border-radius:999px;padding:5px 15px}
+  .tabs button[aria-selected=true]{background:var(--panel);border-color:var(--agent);color:var(--ink)}
+  .note{color:var(--faint);font-size:var(--fleet-text-small)}
+  .batch{border:1px solid var(--line);border-radius:10px;background:var(--panel);
+    padding:13px 15px;margin-bottom:16px}
+  .batch h3{margin:0 0 2px;font-size:var(--fleet-text-body);font-weight:600}
+  .batch .meta{color:var(--faint);font-size:var(--fleet-text-small);margin-bottom:11px;
+    word-break:break-word}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:11px}
+  .card{border:1px solid var(--line);border-radius:9px;overflow:hidden;background:var(--panel2)}
+  .card.win{border-color:var(--human);box-shadow:0 0 0 1px var(--human) inset}
+  .card img{width:100%;display:block;aspect-ratio:1;object-fit:cover;background:#000;cursor:zoom-in}
+  .card audio{width:100%;display:block}
+  .card .bar{display:flex;align-items:center;gap:7px;padding:6px 8px;
+    font-size:var(--fleet-text-small);color:var(--dim)}
+  .card .bar .seed{font-family:var(--fleet-font-mono,monospace)}
+  .card .bar .spacer{flex:1}
+  .prog{height:5px;border-radius:3px;background:var(--panel2);overflow:hidden;margin-bottom:11px}
+  .prog i{display:block;height:100%;background:var(--agent);transition:width .3s}
+  .err{color:var(--human);font-size:var(--fleet-text-small)}
+  dialog{border:1px solid var(--line);border-radius:12px;background:var(--panel);
+    color:var(--ink);max-width:94vw;max-height:94vh;padding:0}
+  dialog img{display:block;max-width:92vw;max-height:88vh}
+  dialog::backdrop{background:rgba(0,0,0,.72)}
+</style>
+</head>
+<body>
+<header>
+  <h1>Gen Lab</h1>
+  <span class="sub">generate many · pick one · commit to the shot list</span>
+  <span class="spacer"></span>
+  <span id="comfy" class="pill">checking…</span>
+  <a class="pill" href="http://127.0.0.1:8831">canvas</a>
+</header>
+<main>
+  <div class="tabs" role="tablist">
+    <button role="tab" data-kind="imagery" aria-selected="true">Imagery</button>
+    <button role="tab" data-kind="sound" aria-selected="false">Music beds</button>
+  </div>
+
+  <div class="row">
+    <label>Video<select id="slug"></select></label>
+    <label>Model<select id="recipe"></select></label>
+    <label>Variants<input id="count" type="number" min="1" max="12" value="4" style="width:74px"></label>
+    <label>First seed<input id="seed" type="number" value="0" style="width:110px"></label>
+    <label class="imagery-only">Size<select id="size"></select></label>
+    <label class="sound-only">Seconds<input id="seconds" type="number" min="10" max="240" value="66" style="width:88px"></label>
+    <label class="sound-only">BPM<input id="bpm" type="number" min="40" max="200" value="90" style="width:80px"></label>
+    <label class="sound-only">Key<select id="keyscale"></select></label>
+  </div>
+  <div class="row" style="display:block">
+    <textarea id="prompt" placeholder="Describe it. For beds, describe instrumentation and mood — lyrics are forced to [instrumental]."></textarea>
+    <div class="note" id="recipe-note"></div>
+  </div>
+  <div class="row">
+    <button class="go" id="go">Generate</button>
+    <span class="note" id="status"></span>
+  </div>
+
+  <div id="pool"></div>
+</main>
+
+<dialog id="zoom"><img alt=""></dialog>
+
+<script>
+const $ = s => document.querySelector(s);
+let KIND = "imagery", CAT = null, POLL = null;
+
+const KEYS = ["C major","D major","E major","F major","G major","A major","B major",
+              "C minor","D minor","E minor","F minor","G minor","A minor","B minor"];
+// Only sizes the models were actually trained near. HiDream-O1 degrades badly
+// below ~4MP, so its own list is deliberately short rather than free-form.
+const SIZES = {
+  "hidream-o1": [[2048,2048],[2304,1728],[1728,2304],[2560,1440]],
+  "flux2-dev": [[1024,1024],[1344,768],[768,1344],[1920,1080]],
+  "flux2-klein-4b": [[1024,1024],[1344,768],[768,1344],[1920,1080]],
+};
+
+async function boot(){
+  CAT = await (await fetch("/api/catalogue")).json();
+  const pill = $("#comfy");
+  pill.textContent = CAT.comfy_up ? "ComfyUI up" : "ComfyUI down — start imagegen";
+  pill.className = "pill " + (CAT.comfy_up ? "up" : "down");
+  $("#slug").innerHTML = CAT.slugs.map(s=>`<option>${s}</option>`).join("");
+  $("#keyscale").innerHTML = KEYS.map(k=>`<option${k==="C major"?" selected":""}>${k}</option>`).join("");
+  $("#seed").value = Math.floor(Math.random()*90000);
+  fillRecipes(); refresh();
+}
+
+function fillRecipes(){
+  const list = CAT[KIND] || [];
+  $("#recipe").innerHTML = list.map(r =>
+    `<option value="${r.key}"${r.missing.length?" disabled":""}>${r.label}`
+    + `${r.missing.length?" — weights missing":""}</option>`).join("");
+  document.querySelectorAll(".imagery-only").forEach(e=>e.style.display = KIND==="imagery"?"":"none");
+  document.querySelectorAll(".sound-only").forEach(e=>e.style.display = KIND==="sound"?"":"none");
+  onRecipe();
+}
+
+function onRecipe(){
+  const r = (CAT[KIND]||[]).find(x=>x.key===$("#recipe").value);
+  $("#recipe-note").textContent = r ? `${r.steps} steps · ${r.note}` : "";
+  if (KIND === "imagery" && r){
+    const sizes = SIZES[r.key] || [[r.width,r.height]];
+    $("#size").innerHTML = sizes.map(([w,h])=>`<option value="${w}x${h}">${w}×${h}</option>`).join("");
+  }
+}
+
+async function refresh(){
+  const slug = $("#slug").value;
+  if (!slug) return;
+  const d = await (await fetch(`/api/pool?slug=${encodeURIComponent(slug)}&kind=${KIND}`)).json();
+  render(d, slug);
+  const busy = Object.values(d.running||{}).some(r=>r.state==="running");
+  clearTimeout(POLL);
+  if (busy) POLL = setTimeout(refresh, 1500);
+}
+
+function render(d, slug){
+  const beats = BEATS[slug] || [];
+  const running = d.running || {};
+  $("#pool").innerHTML = (d.batches||[]).map(b=>{
+    const run = running[b.id];
+    const pct = run ? Math.round(100*run.done/run.total) : 100;
+    const bar = run && run.state==="running"
+      ? `<div class="prog"><i style="width:${pct}%"></i></div>`
+      : "";
+    const err = run && run.state==="error" ? `<div class="err">✕ ${esc(run.error)}</div>` : "";
+    const cards = (b.variants||[]).map(v=>card(slug,b,v,beats)).join("");
+    const dims = b.width ? ` · ${b.width}×${b.height}` : ` · ${b.seconds}s · ${b.bpm}bpm · ${b.keyscale||""}`;
+    return `<div class="batch">
+      <h3>${esc(b.recipe)}${dims}</h3>
+      <div class="meta">${esc(b.prompt||b.tags||"")}</div>
+      ${bar}${err}
+      <div class="grid">${cards || '<span class="note">waiting for the first variant…</span>'}</div>
+    </div>`;
+  }).join("") || '<p class="note">No batches yet for this video.</p>';
+}
+
+function card(slug,b,v,beats){
+  const src = `/api/variant?slug=${encodeURIComponent(slug)}&kind=${KIND}`
+            + `&batch=${encodeURIComponent(b.id)}&variant=${encodeURIComponent(v.file)}`;
+  const media = KIND==="imagery"
+    ? `<img src="${src}" alt="" loading="lazy" onclick="zoom('${src}')">`
+    : `<audio controls preload="none" src="${src}"></audio>`;
+  const picker = KIND==="imagery"
+    ? `<select data-beat>${beats.map(x=>`<option value="${x.id}">${x.id}</option>`).join("")}</select>`
+    : "";
+  return `<div class="card${v.selected?" win":""}" data-batch="${b.id}" data-variant="${v.file}">
+    ${media}
+    <div class="bar">
+      <span class="seed">#${v.seed}</span>
+      ${v.selected?'<span style="color:var(--human)">✓ in shot list</span>':''}
+      <span class="spacer"></span>${picker}
+      <button class="commit" onclick="commit(this)">Commit</button>
+    </div></div>`;
+}
+
+const BEATS = {};
+async function loadBeats(slug){
+  const d = await (await fetch(`/api/beats?slug=${encodeURIComponent(slug)}`)).json();
+  BEATS[slug] = d.beats || [];
+}
+
+function esc(s){ return String(s??"").replace(/[<>&]/g, c=>({"<":"&lt;",">":"&gt;","&":"&amp;"}[c])); }
+function zoom(src){ const d=$("#zoom"); d.querySelector("img").src=src; d.showModal(); }
+$("#zoom").onclick = () => $("#zoom").close();
+
+async function commit(btn){
+  const card = btn.closest(".card");
+  const sel = card.querySelector("[data-beat]");
+  btn.disabled = true;
+  const r = await (await fetch("/api/commit",{method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({slug:$("#slug").value, kind:KIND,
+      batch:card.dataset.batch, variant:card.dataset.variant,
+      beat: sel ? sel.value : ""})})).json();
+  btn.disabled = false;
+  $("#status").textContent = r.ok
+    ? `committed ${card.dataset.variant}${r.beat?" → beat "+r.beat:""} to the shot list`
+    : `✕ ${r.error}`;
+  if (r.ok) refresh();
+}
+
+$("#go").onclick = async () => {
+  const [w,h] = ($("#size").value||"0x0").split("x").map(Number);
+  const body = {slug:$("#slug").value, kind:KIND, recipe:$("#recipe").value,
+    prompt:$("#prompt").value, count:+$("#count").value, seed_start:+$("#seed").value};
+  if (KIND==="imagery"){ body.width=w; body.height=h; }
+  else { body.seconds=+$("#seconds").value; body.bpm=+$("#bpm").value;
+         body.keyscale=$("#keyscale").value; }
+  $("#go").disabled = true;
+  const r = await (await fetch("/api/generate",{method:"POST",
+    headers:{"Content-Type":"application/json"}, body:JSON.stringify(body)})).json();
+  $("#go").disabled = false;
+  $("#status").textContent = r.ok ? `batch ${r.batch} queued` : `✕ ${r.error}`;
+  if (r.ok){ $("#seed").value = +$("#seed").value + +$("#count").value; refresh(); }
+};
+
+document.querySelectorAll(".tabs button").forEach(b => b.onclick = () => {
+  document.querySelectorAll(".tabs button").forEach(x=>x.setAttribute("aria-selected", x===b));
+  KIND = b.dataset.kind; fillRecipes(); refresh();
+});
+$("#recipe").onchange = onRecipe;
+$("#slug").onchange = async () => { await loadBeats($("#slug").value); refresh(); };
+
+boot().then(()=>loadBeats($("#slug").value));
+</script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+{
+  "hash": "sha256:3f2e39f2c4652a6d40bafdb6e67e8876aa34d18c94c812a66ac9ca9944ca4748",
+  "id": "wtc-prelude-c",
+  "library": "sound",
+  "provenance": {
+    "digital_source_type": "algorithmicMedia",
+    "inputs": {
+      "title": "File:JS Bach - Well Tempered Clavier - Prelude in Fugue No.1 in C major.ogg"
+    },
+    "model": "",
+    "produced_utc": "2026-08-28T12:22:58+00:00",
+    "prompt": "",
+    "seed": null,
+    "stem": "music",
+    "tool": "commons",
+    "tool_version": ""
+  },
+  "rights": {
+    "attribution_override": "",
+    "attribution_required": false,
+    "creator": "Johann Sebastian Bach (1685-1750) (see Musopen for performance author information)",
+    "creator_url": "",
+    "modification_note": "",
+    "modified": false,
+    "retrieved_utc": "2026-08-28T12:22:58.068186+00:00",
+    "source_url": "https://commons.wikimedia.org/wiki/File%3AJS_Bach_-_Well_Tempered_Clavier_-_Prelude_in_Fugue_No.1_in_C_major.ogg",
+    "spdx_license": "CC0-1.0",
+    "title": "JS Bach - Well Tempered Clavier - Prelude in Fugue No.1 in C major"
+  },
+  "selected": true,
+  "size_bytes": 3548463
+}

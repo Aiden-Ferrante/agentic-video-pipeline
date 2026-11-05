@@ -1,0 +1,32 @@
+{
+  "hash": "sha256:4e7ead76cfdda0979ff7d771fbbc3dbb312ca80ce25b78f3cdcaef07fcc7c2da",
+  "id": "meditation-impromptu-02",
+  "library": "sound",
+  "provenance": {
+    "digital_source_type": "digitalCapture",
+    "inputs": {
+      "source_url": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Meditation%20Impromptu%2002.mp3"
+    },
+    "model": "",
+    "produced_utc": "2026-08-27T02:37:18+00:00",
+    "prompt": "",
+    "seed": null,
+    "stem": "music",
+    "tool": "incompetech",
+    "tool_version": ""
+  },
+  "rights": {
+    "attribution_override": "\"Meditation Impromptu 02\" Kevin MacLeod (incompetech.com), Licensed under Creative Commons: By Attribution 4.0",
+    "attribution_required": true,
+    "creator": "Kevin MacLeod",
+    "creator_url": "https://incompetech.com",
+    "modification_note": "",
+    "modified": false,
+    "retrieved_utc": "2026-08-27T02:37:18+00:00",
+    "source_url": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Meditation%20Impromptu%2002.mp3",
+    "spdx_license": "CC-BY-4.0",
+    "title": "Meditation Impromptu 02"
+  },
+  "selected": true,
+  "size_bytes": 8261798
+}

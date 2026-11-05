@@ -1,0 +1,32 @@
+{
+  "hash": "sha256:faacc6acfb70a523c3b38ff30e8ae9d23839a4b56f6b3428dd144ce4d81cfd00",
+  "id": "chopin-nocturne-19",
+  "library": "sound",
+  "provenance": {
+    "digital_source_type": "algorithmicMedia",
+    "inputs": {
+      "title": "File:Chopin - Nocturne No. 19 in E minor, Op. 72 No. 1 (Luke Faulkner).flac"
+    },
+    "model": "",
+    "produced_utc": "2026-08-28T12:36:37+00:00",
+    "prompt": "",
+    "seed": null,
+    "stem": "music",
+    "tool": "commons",
+    "tool_version": ""
+  },
+  "rights": {
+    "attribution_override": "",
+    "attribution_required": false,
+    "creator": "Fr\u00e9d\u00e9ric Chopin / Luke Faulkner",
+    "creator_url": "",
+    "modification_note": "",
+    "modified": false,
+    "retrieved_utc": "2026-08-28T12:36:37.698860+00:00",
+    "source_url": "https://commons.wikimedia.org/wiki/File%3AChopin_-_Nocturne_No._19_in_E_minor%2C_Op._72_No._1_%28Luke_Faulkner%29.flac",
+    "spdx_license": "LicenseRef-public-domain",
+    "title": "Chopin - Nocturne No. 19 in E minor, Op. 72 No. 1 (Luke Faulkner)"
+  },
+  "selected": true,
+  "size_bytes": 12537771
+}

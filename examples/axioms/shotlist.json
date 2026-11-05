@@ -1,0 +1,746 @@
+{
+  "slug": "axioms",
+  "title": "Assumptions, Tautologies and Axioms",
+  "fps": 30,
+  "resolution": [
+    1920,
+    1080
+  ],
+  "letterbox": "0x1c1714",
+  "timing": {
+    "mode": "estimate",
+    "pace": 1.0,
+    "settle": 0.7,
+    "_note": "estimate 2026-08-28: the ElevenLabs scratch was cut. Picture is cut to read-time. Drop a recording at voice/takes/<beat>.wav and it wins over everything — then flip mode back to auto so the cut follows the performance. The scratch is archived under voice/_scratch-elevenlabs/."
+  },
+  "grade": {
+    "_note": "One film stock over the whole programme. aspect=0 and a light vignette because these beats are DRAWN to the 16:9 frame: the 2.39 crop inherited from videos/origins removed every title and caption, and vignette 0.32 made off-centre text unreadable.",
+    "aspect": 0.0,
+    "grain": 10,
+    "lift": 0.022,
+    "shadow_tint": 0.005,
+    "contrast": 1.06,
+    "saturation": 1.04,
+    "vignette": 0.12,
+    "halation": 0.3,
+    "halation_radius": 18,
+    "aberration": 0
+  },
+  "_note": "Beats are SHOTS. Rebuilt 2026-08-27 from the REVAMP script. This module scored lowest on every narrative marker in the diagnosis, and the fix it named is the one applied: the regress is now a crisis with three escape routes, two of which fail ON SCREEN, and the module has the protagonists it always had available (Agrippa, Zermelo, Banach, Tarski). The 19 original drawings are reused unedited. Note the chapter order swapped: the regress now comes FIRST, because the tautology material is about what may be bolted in once you know a chain has to stop.",
+  "beats": [
+    {
+      "id": "r01",
+      "vo_text": "Every proof ends somewhere.",
+      "visual": {
+        "kind": "animation",
+        "scene_file": "axioms.py",
+        "scene": "EveryProofEndsSomewhere",
+        "quality": "h"
+      },
+      "chapter": "Where the regress stops"
+    },
+    {
+      "id": "t00",
+      "vo_text": "",
+      "visual": {
+        "kind": "animation",
+        "scene_file": "logic_toc.py",
+        "scene": "TocAxioms",
+        "quality": "h"
+      }
+    },
+    {
+      "id": "r02",
+      "vo_text": "Not at the conclusion — that's where it *arrives*. I mean the other end. The first line. What is that standing on?",
+      "visual": {
+        "kind": "animation",
+        "scene_file": "axioms.py",
+        "scene": "EveryProofEndsSomewhere",
+        "quality": "h"
+      },
+      "chapter": "Where the regress stops"
+    },
+    {
+      "id": "r03",
+      "vo_text": "Because a proof is a chain of justifications, and every link cites the one before it. So follow it back.",
+      "visual": {
+        "kind": "animation",
+        "scene_file": "axioms_r.py",
+        "scene": "FollowItBack",
+        "quality": "h"
+      },
+      "chapter": "Where the regress stops"
+    },
+    {
+      "id": "r04",
+      "vo_text": "And back.",
+      "visual": {
+        "kind": "animation",
+        "scene_file": "axioms_r.py",
+        "scene": "FollowItBack",
+        "quality": "h"
+      },
+      "chapter": "Where the regress stops"
+    },
+    {
+      "id": "r05",
+      "vo_text": "This is not a new worry. Around the first century, a Greek sceptic named Agrippa laid out the problem in a form nobody has improved on since.",
+      "visual": {
+        "kind": "animation",
+        "scene_file": "axioms_r.py",
+        "scene": "Agrippa",
+        "quality": "h"
+      },
+      "chapter": "Where the regress stops"
+    },
+    {
+      "id": "r06",
+      "vo_text": "There are exactly three ways a chain of justification can end. Only three.",
+      "visual": {
+        "kind": "animation",
+        "scene_file": "axioms_r.py",
+        "scene": "OnlyThree",
+        "quality": "h"
+      },
+      "chapter": "Where the regress stops"
+    },
+    {
+      "id": "r07",
+      "vo_text": "It runs forever. It closes into a circle. Or it stops at something asserted without proof.",
+      "visual": {
+        "kind": "animation",
+        "scene_file": "axioms.py",
+        "scene": "ThreeWaysToEnd",
+        "quality": "h"
+      },
+      "chapter": "Where the regress stops"
+    },
+    {
+      "id": "r08",
+      "vo_text": "Two of those are catastrophes. Let's watch them fail.",
+      "visual": {
+        "kind": "animation",
+        "scene_file": "axioms_r.py",
+        "scene": "WatchThemFail",
+        "quality": "h"
+      },
+      "chapter": "Where the regress stops"
+    },
+    {
+      "id": "r09",
+      "vo_text": "Route one: the chain never ends. Every statement is justified by an earlier one, forever.",
+      "visual": {
+        "kind": "animation",
+        "scene_file": "axioms_r.py",
+        "scene": "RegressNeverEnds",
+        "quality": "h"
+      },
+      "chapter": "Where the regress stops"
+    },
+    {
+      "id": "r10",
+      "vo_text": "Which sounds almost respectable — nothing is ever taken on faith. Follow it, though.",
+      "visual": {
+        "kind": "animation",
+        "scene_file": "axioms_r.py",
+        "scene": "RegressNeverEnds",
+        "quality": "h"
+      },
+      "chapter": "Where the regress stops"
+    },
+    {
+      "id": "r11",
+      "vo_text": "Nothing is ever established, because establishing anything would require finishing, and you never finish. You have not built a foundation. You have built a fall.",
+      "visual": {
+        "kind": "animation",
+        "scene_file": "axioms_r.py",
+        "scene": "RegressNeverEnds",
+        "quality": "h"
+      },
+      "chapter": "Where the regress stops"
+    },
+    {
+      "id": "r12",
+      "vo_text": "Route two: the chain closes. A is justified by B, B by C, and C — eventually — by A.",
+      "visual": {
+        "kind": "animation",
+        "scene_file": "axioms_r.py",
+        "scene": "CircleProvesAnything",
+        "quality": "h"
+      },
+      "chapter": "Where the regress stops"
+    },
+    {
+      "id": "r13",
+      "vo_text": "Now it terminates. It's finite. Every step is licensed.",
+      "visual": {
+        "kind": "animation",
+        "scene_file": "axioms_r.py",
+        "scene": "CircleProvesAnything",
+        "quality": "h"
+      },
+      "chapter": "Where the regress stops"
+    },
+    {
+      "id": "r14",
+      "vo_text": "And it proves absolutely anything you like.",
+      "visual": {
+        "kind": "animation",
+        "scene_file": "axioms_r.py",
+        "scene": "CircleProvesAnything",
+        "quality": "h"
+      },
+      "chapter": "Where the regress stops"
+    },
+    {
+      "id": "r15",
+      "vo_text": "Because a circle doesn't care what's inside it. It only cares that it closes.",
+      "visual": {
+        "kind": "animation",
+        "scene_file": "axioms_r.py",
+        "scene": "CircleProvesAnything",
+        "quality": "h"
+      },
+      "chapter": "Where the regress stops"
+    },
+    {
+      "id": "r16",
+      "vo_text": "So: two down. The third is what formal systems do, and they do it openly.",
+      "visual": {
+        "kind": "animation",
+        "scene_file": "axioms.py",
+        "scene": "TakeTheThirdOpenly",
+        "quality": "h"
+      },
+      "chapter": "Where the regress stops"
+    },
+    {
+      "id": "r17",
+      "vo_text": "Stop the chain deliberately. Write down statements you assert without proof. Call them axioms. And then be answerable for everything they let you derive.",
+      "visual": {
+        "kind": "animation",
+        "scene_file": "axioms.py",
+        "scene": "TakeTheThirdOpenly",
+        "quality": "h"
+      },
+      "chapter": "Where the regress stops"
+    },
+    {
+      "id": "r18",
+      "vo_text": "You do not prove an axiom. You choose it. And you inherit the consequences.",
+      "visual": {
+        "kind": "animation",
+        "scene_file": "axioms.py",
+        "scene": "YouChooseAnAxiom",
+        "quality": "h"
+      },
+      "chapter": "Where the regress stops"
+    },
+    {
+      "id": "d02",
+      "vo_text": "",
+      "visual": {
+        "kind": "animation",
+        "scene_file": "logic_toc.py",
+        "scene": "DivAxioms2",
+        "quality": "h"
+      }
+    },
+    {
+      "id": "r19",
+      "vo_text": "But not everything is safe to bolt into a proof system. There's a line, and it's worth seeing where it falls.",
+      "visual": {
+        "kind": "animation",
+        "scene_file": "axioms_r.py",
+        "scene": "ThereIsALine",
+        "quality": "h"
+      },
+      "chapter": "Tautology, contradiction, and everything contingent"
+    },
+    {
+      "id": "r20",
+      "vo_text": "Some statements are true under every possible valuation. P or not-P. If P, and P implies Q, then Q.",
+      "visual": {
+        "kind": "animation",
+        "scene_file": "axioms.py",
+        "scene": "Tautology",
+        "quality": "h"
+      },
+      "chapter": "Tautology, contradiction, and everything contingent"
+    },
+    {
+      "id": "r21",
+      "vo_text": "There is no assignment of truth values that can make them fail. Not an unlikely one. Not a weird one. None.",
+      "visual": {
+        "kind": "animation",
+        "scene_file": "axioms.py",
+        "scene": "Tautology",
+        "quality": "h"
+      },
+      "chapter": "Tautology, contradiction, and everything contingent"
+    },
+    {
+      "id": "r22",
+      "vo_text": "Those are tautologies. And some statements are false under every valuation — contradictions. Everything else is contingent, which is to say: it depends on the world.",
+      "visual": {
+        "kind": "animation",
+        "scene_file": "axioms.py",
+        "scene": "ContradictionAndContingent",
+        "quality": "h"
+      },
+      "chapter": "Tautology, contradiction, and everything contingent"
+    },
+    {
+      "id": "r23",
+      "vo_text": "Now, a tautology carries no information about the world.",
+      "visual": {
+        "kind": "animation",
+        "scene_file": "axioms.py",
+        "scene": "NoInformationAboutTheWorld",
+        "quality": "h"
+      },
+      "chapter": "Tautology, contradiction, and everything contingent"
+    },
+    {
+      "id": "r24",
+      "vo_text": "None. Change the climate, change the geometry, change the physical constants —",
+      "visual": {
+        "kind": "animation",
+        "scene_file": "axioms.py",
+        "scene": "NoInformationAboutTheWorld",
+        "quality": "h"
+      },
+      "chapter": "Tautology, contradiction, and everything contingent"
+    },
+    {
+      "id": "r25",
+      "vo_text": "— and it does not so much as flicker.",
+      "visual": {
+        "kind": "animation",
+        "scene_file": "axioms.py",
+        "scene": "NoInformationAboutTheWorld",
+        "quality": "h"
+      },
+      "chapter": "Tautology, contradiction, and everything contingent"
+    },
+    {
+      "id": "r26",
+      "vo_text": "That sounds like a criticism. It is the opposite. It is exactly why a tautology is safe to bolt into a proof system as a rule.",
+      "visual": {
+        "kind": "animation",
+        "scene_file": "axioms.py",
+        "scene": "SafeAsRules",
+        "quality": "h"
+      },
+      "chapter": "Tautology, contradiction, and everything contingent"
+    },
+    {
+      "id": "r27",
+      "vo_text": "Because a rule that told you something about reality would be a premise in disguise — smuggled in, doing work, never declared.",
+      "visual": {
+        "kind": "animation",
+        "scene_file": "axioms.py",
+        "scene": "SafeAsRules",
+        "quality": "h"
+      },
+      "chapter": "Tautology, contradiction, and everything contingent"
+    },
+    {
+      "id": "r28",
+      "vo_text": "The machinery must be empty. Everything you actually claim goes in the tray, where you can be held to it.",
+      "visual": {
+        "kind": "animation",
+        "scene_file": "axioms_r.py",
+        "scene": "TheMachineryMustBeEmpty",
+        "quality": "h"
+      },
+      "chapter": "Tautology, contradiction, and everything contingent"
+    },
+    {
+      "id": "r29",
+      "vo_text": "So axioms are chosen. Which raises the obvious question: can you choose whatever you like?",
+      "visual": {
+        "kind": "animation",
+        "scene_file": "axioms_r.py",
+        "scene": "CanYouChooseAnything",
+        "quality": "h"
+      },
+      "chapter": "Tautology, contradiction, and everything contingent"
+    },
+    {
+      "id": "r30",
+      "vo_text": "In nineteen oh-four, Ernst Zermelo needed one particular assumption to prove a result about ordering sets. It sounded harmless.",
+      "visual": {
+        "kind": "imagery",
+        "source": "commons",
+        "title": "File:Ernst Zermelo 1900s.jpg",
+        "lock": true,
+        "motion": {
+          "kind": "defocus",
+          "focus_from": 0.4,
+          "focus_to": 0.78,
+          "strength": 8,
+          "push": 0.06
+        }
+      },
+      "chapter": "Tautology, contradiction, and everything contingent"
+    },
+    {
+      "id": "r31",
+      "vo_text": "Given any collection of non-empty sets, you can pick one element from each.",
+      "visual": {
+        "kind": "animation",
+        "scene_file": "axioms_r.py",
+        "scene": "PickOneFromEach",
+        "quality": "h"
+      },
+      "chapter": "Tautology, contradiction, and everything contingent"
+    },
+    {
+      "id": "r32",
+      "vo_text": "That's it. That's the axiom of choice. Read it again and try to find something objectionable in it.",
+      "visual": {
+        "kind": "animation",
+        "scene_file": "axioms_r.py",
+        "scene": "PickOneFromEach",
+        "quality": "h"
+      },
+      "chapter": "Tautology, contradiction, and everything contingent"
+    },
+    {
+      "id": "r33",
+      "vo_text": "Mathematicians objected immediately and loudly, and it took twenty years to see exactly why they were right to.",
+      "visual": {
+        "kind": "animation",
+        "scene_file": "axioms_r.py",
+        "scene": "TheyObjectedLoudly",
+        "quality": "h"
+      },
+      "chapter": "Tautology, contradiction, and everything contingent"
+    },
+    {
+      "id": "r34",
+      "vo_text": "Nineteen twenty-four. Stefan Banach and Alfred Tarski publish a consequence.",
+      "visual": {
+        "kind": "animation",
+        "scene_file": "axioms_r.py",
+        "scene": "BanachAndTarski",
+        "quality": "h"
+      },
+      "chapter": "Tautology, contradiction, and everything contingent"
+    },
+    {
+      "id": "r35",
+      "vo_text": "Take a solid sphere. Cut it into five pieces.",
+      "visual": {
+        "kind": "animation",
+        "scene_file": "axioms_r.py",
+        "scene": "CutIntoFivePieces",
+        "quality": "h"
+      },
+      "chapter": "Tautology, contradiction, and everything contingent"
+    },
+    {
+      "id": "r36",
+      "vo_text": "Move the pieces. Rotate them. Translate them. Do not stretch anything, do not add anything.",
+      "visual": {
+        "kind": "animation",
+        "scene_file": "axioms_r.py",
+        "scene": "CutIntoFivePieces",
+        "quality": "h"
+      },
+      "chapter": "Tautology, contradiction, and everything contingent"
+    },
+    {
+      "id": "r37",
+      "vo_text": "Reassemble.",
+      "visual": {
+        "kind": "animation",
+        "scene_file": "axioms_r.py",
+        "scene": "CutIntoFivePieces",
+        "quality": "h"
+      },
+      "chapter": "Tautology, contradiction, and everything contingent"
+    },
+    {
+      "id": "r38",
+      "vo_text": "Two spheres. Each the size of the one you started with. That is a theorem, and the axiom of choice is what makes it one.",
+      "visual": {
+        "kind": "animation",
+        "scene_file": "axioms_r.py",
+        "scene": "TwoSpheres",
+        "quality": "h"
+      },
+      "chapter": "Tautology, contradiction, and everything contingent"
+    },
+    {
+      "id": "r39",
+      "vo_text": "So: refuse it. Throw it out.",
+      "visual": {
+        "kind": "animation",
+        "scene_file": "axioms.py",
+        "scene": "RefuseItAndPay",
+        "quality": "h"
+      },
+      "chapter": "Tautology, contradiction, and everything contingent"
+    },
+    {
+      "id": "r40",
+      "vo_text": "And elsewhere in the structure, quietly, some vector spaces stop having bases.",
+      "visual": {
+        "kind": "animation",
+        "scene_file": "axioms.py",
+        "scene": "RefuseItAndPay",
+        "quality": "h"
+      },
+      "chapter": "Tautology, contradiction, and everything contingent"
+    },
+    {
+      "id": "r41",
+      "vo_text": "That's the whole shape of it. There is no option here that costs nothing.",
+      "visual": {
+        "kind": "animation",
+        "scene_file": "axioms_r.py",
+        "scene": "NoOptionIsFree",
+        "quality": "h"
+      },
+      "chapter": "Tautology, contradiction, and everything contingent"
+    },
+    {
+      "id": "r42",
+      "vo_text": "ZFC — Zermelo–Fraenkel set theory, with Choice — is the particular set of choices modern mathematics defaults to. Not because it is correct.",
+      "visual": {
+        "kind": "animation",
+        "scene_file": "axioms.py",
+        "scene": "ZFC",
+        "quality": "h"
+      },
+      "chapter": "Tautology, contradiction, and everything contingent"
+    },
+    {
+      "id": "r43",
+      "vo_text": "Because it is what almost everyone agreed to stand on.",
+      "visual": {
+        "kind": "animation",
+        "scene_file": "axioms.py",
+        "scene": "ZFC",
+        "quality": "h"
+      },
+      "chapter": "Tautology, contradiction, and everything contingent"
+    },
+    {
+      "id": "r44",
+      "vo_text": "Which brings us to the notation, and to the thing about it that everyone forgets.",
+      "visual": {
+        "kind": "animation",
+        "scene_file": "axioms.py",
+        "scene": "RelativeToPremises",
+        "quality": "h"
+      },
+      "chapter": "Tautology, contradiction, and everything contingent"
+    },
+    {
+      "id": "r45",
+      "vo_text": "Gamma proves phi. A proof is always relative to premises.",
+      "visual": {
+        "kind": "animation",
+        "scene_file": "axioms_r.py",
+        "scene": "TheTurnstile",
+        "quality": "h"
+      },
+      "chapter": "Tautology, contradiction, and everything contingent"
+    },
+    {
+      "id": "r46",
+      "vo_text": "And the gamma does not evaporate once the theorem has a name.",
+      "visual": {
+        "kind": "animation",
+        "scene_file": "axioms.py",
+        "scene": "RelativeToPremises",
+        "quality": "h"
+      },
+      "chapter": "Tautology, contradiction, and everything contingent"
+    },
+    {
+      "id": "r47",
+      "vo_text": "*Theorem* means: follows from what we agreed to. The agreement is part of the result. It is not scaffolding you remove when the building is done.",
+      "visual": {
+        "kind": "animation",
+        "scene_file": "axioms_r.py",
+        "scene": "NotScaffolding",
+        "quality": "h"
+      },
+      "chapter": "Tautology, contradiction, and everything contingent"
+    },
+    {
+      "id": "d03",
+      "vo_text": "",
+      "visual": {
+        "kind": "animation",
+        "scene_file": "logic_toc.py",
+        "scene": "DivAxioms3",
+        "quality": "h"
+      }
+    },
+    {
+      "id": "r48",
+      "vo_text": "Now — this is not a foundational curiosity. It is the shape of every result in machine learning, and getting it wrong will cost you.",
+      "visual": {
+        "kind": "animation",
+        "scene_file": "axioms.py",
+        "scene": "NotACuriosity",
+        "quality": "h"
+      },
+      "chapter": "Every learning guarantee is a proof from premises"
+    },
+    {
+      "id": "r49",
+      "vo_text": "A learning guarantee is gamma proves phi.",
+      "visual": {
+        "kind": "animation",
+        "scene_file": "axioms.py",
+        "scene": "TheLearningGuarantee",
+        "quality": "h"
+      },
+      "chapter": "Every learning guarantee is a proof from premises"
+    },
+    {
+      "id": "r50",
+      "vo_text": "And the gamma reads something like this. The data are independent and identically distributed, from a fixed distribution. The hypothesis class is this one. The loss is bounded.",
+      "visual": {
+        "kind": "animation",
+        "scene_file": "axioms.py",
+        "scene": "TheLearningGuarantee",
+        "quality": "h"
+      },
+      "chapter": "Every learning guarantee is a proof from premises"
+    },
+    {
+      "id": "r51",
+      "vo_text": "Look at those. Every one is a claim about *your situation*. Not about mathematics.",
+      "visual": {
+        "kind": "animation",
+        "scene_file": "axioms.py",
+        "scene": "ClaimsAboutYourSituation",
+        "quality": "h"
+      },
+      "chapter": "Every learning guarantee is a proof from premises"
+    },
+    {
+      "id": "r52",
+      "vo_text": "And now ship it.",
+      "visual": {
+        "kind": "animation",
+        "scene_file": "axioms_r.py",
+        "scene": "NowShipIt",
+        "quality": "h"
+      },
+      "chapter": "Every learning guarantee is a proof from premises"
+    },
+    {
+      "id": "r53",
+      "vo_text": "The distribution shifts — it always does. Inputs start arriving correlated. The loss spikes past its assumed bound.",
+      "visual": {
+        "kind": "animation",
+        "scene_file": "axioms_r.py",
+        "scene": "NowShipIt",
+        "quality": "h"
+      },
+      "chapter": "Every learning guarantee is a proof from premises"
+    },
+    {
+      "id": "r54",
+      "vo_text": "The model degrades. Metrics fall. And somebody says the theory doesn't work in practice.",
+      "visual": {
+        "kind": "animation",
+        "scene_file": "axioms_r.py",
+        "scene": "TheDashboardDegrades",
+        "quality": "h"
+      },
+      "chapter": "Every learning guarantee is a proof from premises"
+    },
+    {
+      "id": "r55",
+      "vo_text": "So check. Take the theorem apart.",
+      "visual": {
+        "kind": "animation",
+        "scene_file": "axioms_r.py",
+        "scene": "SoCheck",
+        "quality": "h"
+      },
+      "chapter": "Every learning guarantee is a proof from premises"
+    },
+    {
+      "id": "r56",
+      "vo_text": "Every line still checks out. Nothing in it has moved. The theorem is exactly as true as the day it was proved.",
+      "visual": {
+        "kind": "animation",
+        "scene_file": "axioms_r.py",
+        "scene": "SoCheck",
+        "quality": "h"
+      },
+      "chapter": "Every learning guarantee is a proof from premises"
+    },
+    {
+      "id": "r57",
+      "vo_text": "Gamma did.",
+      "visual": {
+        "kind": "animation",
+        "scene_file": "axioms.py",
+        "scene": "GammaDid",
+        "quality": "h"
+      },
+      "chapter": "Every learning guarantee is a proof from premises"
+    },
+    {
+      "id": "r58",
+      "vo_text": "The theorem above it remains perfectly intact. And perfectly irrelevant.",
+      "visual": {
+        "kind": "animation",
+        "scene_file": "axioms_r.py",
+        "scene": "IntactAndIrrelevant",
+        "quality": "h"
+      },
+      "chapter": "Every learning guarantee is a proof from premises"
+    },
+    {
+      "id": "r59",
+      "vo_text": "Which is why reading the gamma is not pedantry. It is the difference between knowing why your system failed, and believing that mathematics let you down.",
+      "visual": {
+        "kind": "animation",
+        "scene_file": "axioms_r.py",
+        "scene": "NotPedantry",
+        "quality": "h"
+      },
+      "chapter": "Every learning guarantee is a proof from premises"
+    },
+    {
+      "id": "r60",
+      "vo_text": "Next: a different foundation entirely. One where the premises are not written in a file somewhere — they're checked by a machine that will not let you forget them.",
+      "visual": {
+        "kind": "animation",
+        "scene_file": "axioms_r.py",
+        "scene": "ASecondFoundationArrives",
+        "quality": "h"
+      },
+      "chapter": "Every learning guarantee is a proof from premises"
+    }
+  ],
+  "thumbnail": {
+    "title": "Assumptions, Tautologies and Axioms",
+    "kicker": "Logic · 1.5",
+    "backplate": "r59"
+  },
+  "music": {
+    "bed": "gymnopedie",
+    "gain_db": -9,
+    "fade": 3.0,
+    "_note": "Satie · Gymnopédie (CC0) — suspended and unresolved, for a crisis with no free option."
+  },
+  "chapter_tag": {
+    "enabled": true,
+    "_note": "A persistent corner tag naming the part on screen, with the module's other parts dimmed beside it. The TOC and divider cards say where you are twice; this says it for the whole runtime. Spans come from the TIMELINE, so a reorder moves it.",
+    "number": "2.1.1.5",
+    "title": "Assumptions, Tautologies and Axioms"
+  }
+}

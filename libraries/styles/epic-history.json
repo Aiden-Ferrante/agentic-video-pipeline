@@ -1,0 +1,76 @@
+{
+  "id": "epic-history",
+  "version": 1,
+  "title": "3B1B × Epic History",
+  "_note": "Extracted 2026-09-01 from the six Logic modules and content-manager/projects/logic.json. IMMUTABLE while a shipped master binds it — fork to epic-history-2 to change it.",
+  "writer": {
+    "doc": "Projects/Videos/Logic/HOUSE STYLE — 3B1B x Epic History.md",
+    "sentence": "The history is the narrative spine; the mathematics is the discovery the viewer makes alongside the people in the story.",
+    "register": "Grave about the stakes, curious about the ideas. Short declaratives for the drama, longer looping sentences for the reasoning. Second person sparingly, never as chumminess.",
+    "acts": "Every section opens on a question or a want. People want things and fail. Let the viewer reach the idea a beat before the narrator names it. Name the stakes before the machinery. Taxonomy runs are forbidden. The concepts are a checklist, not an outline.",
+    "length_minutes": [
+      10,
+      15
+    ],
+    "cold_open": "Wordless, under the bed, before any title. Living things move; no humans until the end; no exhibits. See COLD_OPEN.md.",
+    "music_policy": "one curated bed per module, classical or drone; never generated for a shipped module"
+  },
+  "checks": {
+    "_note": "Read by the linter (v0.13.0). Numbers, not adjectives.",
+    "questions_per_act_min": 2,
+    "taxonomy_run_max": 2,
+    "words_per_minute": [
+      110,
+      135
+    ],
+    "sentence_words_max": 28,
+    "silent_shot_seconds": [
+      4.5,
+      7.0
+    ],
+    "settle_seconds": [
+      0.5,
+      1.0
+    ]
+  },
+  "bindings": {
+    "timing": {
+      "pace": 1.0,
+      "settle": 0.7
+    },
+    "letterbox": "0x1c1714",
+    "grade": {
+      "aspect": 0.0,
+      "grain": 10,
+      "lift": 0.022,
+      "shadow_tint": 0.005,
+      "contrast": 1.06,
+      "saturation": 1.04,
+      "vignette": 0.12,
+      "halation": 0.3,
+      "halation_radius": 18,
+      "aberration": 0
+    },
+    "narration": {
+      "voice_settings": {
+        "stability": 0.45,
+        "similarity_boost": 0.85,
+        "style": 0.25,
+        "use_speaker_boost": true
+      }
+    },
+    "music": {
+      "gain_db": -9,
+      "fade": 3.0
+    },
+    "chapter_tag": {
+      "enabled": true
+    },
+    "imagery": {
+      "prefer": "archival",
+      "generated": "backplates and texture only, never evidence"
+    },
+    "scene_kit": "revamp_kit",
+    "_note": "Only keys a shot list block may carry belong here: they land in beats/ fragments byte for byte. Prose about policy goes under `writer`."
+  }
+}

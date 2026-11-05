@@ -1,0 +1,32 @@
+{
+  "hash": "sha256:28c7532b808086046f02164807cbcad659db614686f2a49a78d87516fa4d3236",
+  "id": "frozen-star",
+  "library": "sound",
+  "provenance": {
+    "digital_source_type": "digitalCapture",
+    "inputs": {
+      "source_url": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Frozen%20Star.mp3"
+    },
+    "model": "",
+    "produced_utc": "2026-08-27T02:37:15+00:00",
+    "prompt": "",
+    "seed": null,
+    "stem": "music",
+    "tool": "incompetech",
+    "tool_version": ""
+  },
+  "rights": {
+    "attribution_override": "\"Frozen Star\" Kevin MacLeod (incompetech.com), Licensed under Creative Commons: By Attribution 4.0",
+    "attribution_required": true,
+    "creator": "Kevin MacLeod",
+    "creator_url": "https://incompetech.com",
+    "modification_note": "",
+    "modified": false,
+    "retrieved_utc": "2026-08-27T02:37:15+00:00",
+    "source_url": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Frozen%20Star.mp3",
+    "spdx_license": "CC-BY-4.0",
+    "title": "Frozen Star"
+  },
+  "selected": true,
+  "size_bytes": 8977291
+}

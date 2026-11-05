@@ -1,0 +1,34 @@
+{
+  "hash": "sha256:3023a39a2ed9086d6b4733f2203ee0928eac6d6f965209daddc35c65bdeacf39",
+  "id": "limburg-modular",
+  "library": "sound",
+  "provenance": {
+    "digital_source_type": "algorithmicMedia",
+    "inputs": {
+      "file": "6.11.2021 ihre majest\u00e4t,k\u00f6nig drone der dritte.mp3",
+      "identifier": "6.11.2021-ihre-majestatkonig-drone-der-dritte",
+      "uploader": "jpschmeets@gmail.com"
+    },
+    "model": "",
+    "produced_utc": "2026-08-30T09:38:27+00:00",
+    "prompt": "",
+    "seed": null,
+    "stem": "music",
+    "tool": "archive.org",
+    "tool_version": ""
+  },
+  "rights": {
+    "attribution_override": "",
+    "attribution_required": false,
+    "creator": "LIMBURG modular",
+    "creator_url": "",
+    "modification_note": "",
+    "modified": false,
+    "retrieved_utc": "2026-08-30T09:38:27.095748+00:00",
+    "source_url": "https://archive.org/details/6.11.2021-ihre-majestatkonig-drone-der-dritte",
+    "spdx_license": "CC0-1.0",
+    "title": "ihre majest\u00e4t, k\u00f6nig drone der dritte"
+  },
+  "selected": true,
+  "size_bytes": 26803184
+}

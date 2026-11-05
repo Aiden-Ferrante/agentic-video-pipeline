@@ -1,0 +1,32 @@
+{
+  "hash": "sha256:e7365652410d1fbc8a14d87537855d625c1a5fa8b7de8c626f47c13256ef2ddd",
+  "id": "floating-cities",
+  "library": "sound",
+  "provenance": {
+    "digital_source_type": "digitalCapture",
+    "inputs": {
+      "source_url": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Floating%20Cities.mp3"
+    },
+    "model": "",
+    "produced_utc": "2026-08-27T02:37:17+00:00",
+    "prompt": "",
+    "seed": null,
+    "stem": "music",
+    "tool": "incompetech",
+    "tool_version": ""
+  },
+  "rights": {
+    "attribution_override": "\"Floating Cities\" Kevin MacLeod (incompetech.com), Licensed under Creative Commons: By Attribution 4.0",
+    "attribution_required": true,
+    "creator": "Kevin MacLeod",
+    "creator_url": "https://incompetech.com",
+    "modification_note": "",
+    "modified": false,
+    "retrieved_utc": "2026-08-27T02:37:17+00:00",
+    "source_url": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Floating%20Cities.mp3",
+    "spdx_license": "CC-BY-4.0",
+    "title": "Floating Cities"
+  },
+  "selected": true,
+  "size_bytes": 5892113
+}

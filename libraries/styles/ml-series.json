@@ -1,0 +1,103 @@
+{
+  "id": "ml-series",
+  "version": 1,
+  "title": "The ML series — acts, a generated score, word-cued sound",
+  "_note": "Forked 2026-10-08 from plain-lecture-2 for the ML videos (the human: 'the machine learning videos should have their own template'). bindings are plain-lecture-2's, byte for byte, PLUS `finish` — so binding M1 here re-renders nothing upstream.",
+  "writer": {
+    "doc": "Vault: Projects/Videos/Machine Learning/ — HOUSE STYLE — The Failure Is the Spine (questions, failure openings, spoken equations)",
+    "sentence": "Say the thing, show the thing, move on.",
+    "register": "Short declaratives. No em-dash chains. No 'not X, it is Y'. Second person, present tense. Every formula carried by the prose around it.",
+    "acts": "Each chapter heading in the screenplay is an ACT: it gets its own score in its own mood and is joined to the next by a dip through black.",
+    "length_minutes": [
+      25,
+      30
+    ],
+    "length_rule": "25–30 minutes is the target, not a wall — a little over or under is fine when the content asks for it. Material that would run an hour is SPLIT into modules, never compressed into one; the split is a registry decision (two slugs), not a script decision. At ~150 wpm (speed 1.15) that is roughly 3,000–4,350 words of narration. Education is the point; entertainment is the window into it.",
+    "cold_open": "Five short beats, one animation resolving through them, no bed.",
+    "music_policy": "A generated score per act (Stable Audio 3.0, analog-synth sci-fi, E-flat minor). Never a hard cut: dips and blends only. Act I opens on the chosen Analog-awe take; the last act returns to it.",
+    "sound": "Sound effects are cued to spoken words (shot list: a beat's `sfx`). A cue whose word is gone fails the build before anything renders."
+  },
+  "checks": {
+    "_note": "Read by the linter (v0.13.0).",
+    "questions_per_act_min": 1,
+    "taxonomy_run_max": 3,
+    "words_per_minute": [
+      140,
+      165
+    ],
+    "sentence_words_max": 22,
+    "em_dashes_per_sentence_max": 1,
+    "settle_seconds": [
+      0.5,
+      1.0
+    ]
+  },
+  "bindings": {
+    "timing": {
+      "pace": 1.0,
+      "settle": 0.7
+    },
+    "letterbox": "0x1c1714",
+    "grade": {
+      "aspect": 0.0,
+      "grain": 10,
+      "lift": 0.022,
+      "shadow_tint": 0.005,
+      "contrast": 1.06,
+      "saturation": 1.04,
+      "vignette": 0.12,
+      "halation": 0.3
+    },
+    "narration": {
+      "voice_settings": {
+        "stability": 0.45,
+        "similarity_boost": 0.85,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1.15
+      }
+    },
+    "music": {
+      "gain_db": -9,
+      "fade": 3.0
+    },
+    "chapter_tag": {
+      "enabled": true
+    },
+    "imagery": {
+      "prefer": "drawn",
+      "generated": "not used"
+    },
+    "scene_kit": "scm_style",
+    "_note": "Only keys a shot list block may carry belong here: they land in beats/ fragments byte for byte. Prose about policy goes under `writer`.",
+    "finish": {
+      "enabled": true,
+      "dip_seconds": 2.5,
+      "fade_in_seconds": 1.5,
+      "fade_out_seconds": 3.0,
+      "captions": "FontName=Crimson Text,FontSize=20,PrimaryColour=&H00F0F0F0,OutlineColour=&H80000000,BorderStyle=3,Outline=1,Shadow=0,MarginV=24",
+      "loudness": {
+        "I": -16,
+        "TP": -1.5,
+        "LRA": 11
+      },
+      "voice": {
+        "lufs": -16,
+        "music_under_voice": 0.45,
+        "duck": "threshold=0.02:ratio=6:attack=40:release=700:makeup=1"
+      },
+      "score": {
+        "model": "stable-audio-3-medium",
+        "base_take": "analog-awe-s12.flac",
+        "tail": ", serious documentary science-fiction score, cinematic, instrumental, E-flat minor",
+        "film_open_seconds": 4.0
+      },
+      "card": {
+        "enabled": true,
+        "hold": 3.0,
+        "tail": 0.6,
+        "_card": "2026-10-09, the human: a title card per act, new music fading in while it hangs 2-4 s; no fade on the voice. The dip between acts falls on the held tail and the card, never on narration."
+      }
+    }
+  }
+}

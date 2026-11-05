@@ -1,0 +1,32 @@
+{
+  "hash": "sha256:264c066b5613aa43d1a588ca5ebfdd5c46353b0dd5526c4e8d460c1f7d79ed71",
+  "id": "goldberg-aria-da-capo",
+  "library": "sound",
+  "provenance": {
+    "digital_source_type": "algorithmicMedia",
+    "inputs": {
+      "title": "File:Kimiko Ishizaka - J.S. Bach- -Open- Goldberg Variations, BWV 988 (Piano) - 31 Aria da Capo \u00e8 Fine.mp3"
+    },
+    "model": "",
+    "produced_utc": "2026-08-28T12:22:54+00:00",
+    "prompt": "",
+    "seed": null,
+    "stem": "music",
+    "tool": "commons",
+    "tool_version": ""
+  },
+  "rights": {
+    "attribution_override": "",
+    "attribution_required": false,
+    "creator": "JS Bach and Kimiko Ishizaka",
+    "creator_url": "",
+    "modification_note": "",
+    "modified": false,
+    "retrieved_utc": "2026-08-28T12:22:54.459206+00:00",
+    "source_url": "https://commons.wikimedia.org/wiki/File%3AKimiko_Ishizaka_-_J.S._Bach-_-Open-_Goldberg_Variations%2C_BWV_988_%28Piano%29_-_31_Aria_da_Capo_%C3%A8_Fine.mp3",
+    "spdx_license": "CC0-1.0",
+    "title": "Kimiko Ishizaka - J.S. Bach- -Open- Goldberg Variations, BWV 988 (Piano) - 31 Aria da Capo \u00e8 Fine"
+  },
+  "selected": true,
+  "size_bytes": 6903320
+}

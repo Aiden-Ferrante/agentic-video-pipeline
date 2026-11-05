@@ -1,0 +1,32 @@
+{
+  "hash": "sha256:46a045f6087ac4bdb25ededb308bd2594082104b8dd60eabf7dd656931ea5517",
+  "id": "analog-awe-s12",
+  "library": "sound",
+  "provenance": {
+    "digital_source_type": "trainedAlgorithmicMedia",
+    "inputs": {
+      "chosen_by": "the human, 2026-09-22, over B-pulse / C-vast-machine / D-dark-drone"
+    },
+    "model": "stable-audio-3-medium",
+    "produced_utc": "2026-10-08T15:59:55+00:00",
+    "prompt": "Slow evolving warm analog synth brass pads, long swells, deep sub bass, sparse and spacious, no drums, awe and quiet unease, 70 BPM, serious documentary science-fiction score, cinematic, instrumental, E-flat minor",
+    "seed": 12,
+    "stem": "music",
+    "tool": "stable-audio-3",
+    "tool_version": ""
+  },
+  "rights": {
+    "attribution_override": "",
+    "attribution_required": false,
+    "creator": "generated with Stable Audio 3.0 Medium",
+    "creator_url": "",
+    "modification_note": "",
+    "modified": false,
+    "retrieved_utc": "2026-09-22T20:10:00+00:00",
+    "source_url": "",
+    "spdx_license": "LicenseRef-Stability-AI-Community",
+    "title": "Analog awe (take s12)"
+  },
+  "selected": null,
+  "size_bytes": 5102260
+}

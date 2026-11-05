@@ -1,0 +1,71 @@
+{
+  "id": "plain-lecture",
+  "version": 1,
+  "title": "Plain lecture",
+  "_note": "Extracted 2026-09-01 from linearity and vector-spaces and content-manager/projects/linear-algebra.json. The §2.2 register: plainer and flatter on purpose. IMMUTABLE while a shipped master binds it.",
+  "writer": {
+    "doc": "videos/linearity/script.md (header) — no vault note yet; the register was written in the script itself",
+    "sentence": "Say the thing, show the thing, move on.",
+    "register": "Short declaratives. No em-dash chains. No 'not X, it is Y'. Second person, present tense. Every formula carried by the prose around it.",
+    "acts": "A cold open that asks the everyday question; parts that each answer one thing; a closing that says what the next part stands on.",
+    "length_minutes": [
+      35,
+      60
+    ],
+    "cold_open": "Five short beats, one animation resolving through them, no bed.",
+    "music_policy": "none by default; a module may author a bed"
+  },
+  "checks": {
+    "_note": "Read by the linter (v0.13.0).",
+    "questions_per_act_min": 1,
+    "taxonomy_run_max": 3,
+    "words_per_minute": [
+      120,
+      145
+    ],
+    "sentence_words_max": 22,
+    "em_dashes_per_sentence_max": 1,
+    "settle_seconds": [
+      0.5,
+      1.0
+    ]
+  },
+  "bindings": {
+    "timing": {
+      "pace": 1.0,
+      "settle": 0.7
+    },
+    "letterbox": "0x1c1714",
+    "grade": {
+      "aspect": 0.0,
+      "grain": 10,
+      "lift": 0.022,
+      "shadow_tint": 0.005,
+      "contrast": 1.06,
+      "saturation": 1.04,
+      "vignette": 0.12,
+      "halation": 0.3
+    },
+    "narration": {
+      "voice_settings": {
+        "stability": 0.45,
+        "similarity_boost": 0.85,
+        "style": 0.2,
+        "use_speaker_boost": true
+      }
+    },
+    "music": {
+      "gain_db": -9,
+      "fade": 3.0
+    },
+    "chapter_tag": {
+      "enabled": true
+    },
+    "imagery": {
+      "prefer": "drawn",
+      "generated": "not used"
+    },
+    "scene_kit": "scm_style",
+    "_note": "Only keys a shot list block may carry belong here: they land in beats/ fragments byte for byte. Prose about policy goes under `writer`."
+  }
+}

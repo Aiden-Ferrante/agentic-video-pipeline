@@ -1,0 +1,32 @@
+{
+  "hash": "sha256:1b6c7d606d420f1b5b062b4fff8b1eb4f9c7efe11abd35bc33b2db8be7f35b73",
+  "id": "goldberg-aria",
+  "library": "sound",
+  "provenance": {
+    "digital_source_type": "algorithmicMedia",
+    "inputs": {
+      "title": "File:Kimiko Ishizaka - J.S. Bach- -Open- Goldberg Variations, BWV 988 (Piano) - 01 Aria.mp3"
+    },
+    "model": "",
+    "produced_utc": "2026-08-28T12:22:52+00:00",
+    "prompt": "",
+    "seed": null,
+    "stem": "music",
+    "tool": "commons",
+    "tool_version": ""
+  },
+  "rights": {
+    "attribution_override": "",
+    "attribution_required": false,
+    "creator": "JS Bach and Kimiko Ishizaka",
+    "creator_url": "",
+    "modification_note": "",
+    "modified": false,
+    "retrieved_utc": "2026-08-28T12:22:52.236438+00:00",
+    "source_url": "https://commons.wikimedia.org/wiki/File%3AKimiko_Ishizaka_-_J.S._Bach-_-Open-_Goldberg_Variations%2C_BWV_988_%28Piano%29_-_01_Aria.mp3",
+    "spdx_license": "CC0-1.0",
+    "title": "Kimiko Ishizaka - J.S. Bach- -Open- Goldberg Variations, BWV 988 (Piano) - 01 Aria"
+  },
+  "selected": true,
+  "size_bytes": 12083840
+}
