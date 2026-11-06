@@ -1,5 +1,7 @@
 # agentic-video-pipeline
 
+[![tests](https://github.com/Aiden-Ferrante/agentic-video-pipeline/actions/workflows/tests.yml/badge.svg)](https://github.com/Aiden-Ferrante/agentic-video-pipeline/actions/workflows/tests.yml)
+
 A build system that turns a written script into a finished, narrated video. An agent drives it through an MCP server, and a human keeps the creative calls. Each stage is a separate adapter: voice (ElevenLabs or local TTS), forced alignment, Manim animation, ComfyUI imagery, Stable Audio score, and assembly. The stages talk to each other through one shared contract, the timed **shot list**.
 
 **Result:** it produces the long-form videos on my YouTube channel, [Ferrante²](https://www.youtube.com/@ferrante_2x). The test suite (187 tests) runs offline from a fresh clone in under a second, without any of the media tools installed.
